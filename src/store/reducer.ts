@@ -19,7 +19,7 @@ import rankingReducer from './slice/user/ranking';
 import testTypeListReducer from './slice/user/testType';
 import packagePlanReducer from './slice/admin/packages';
 import userPackagePlanReducer from './slice/user/package-plan';
-
+import previousChatSlice from './slice/ai/previousChatSlice'
 // ==============================|| COMBINE REDUCER ||============================== //
 
 const reducer = combineReducers({
@@ -39,7 +39,8 @@ const reducer = combineReducers({
   testTypes: testTypeListReducer,
   overAllAnallysis: overAllAnalysisReducer,
   packagePlan: packagePlanReducer,
-  userPacakgePlan: userPackagePlanReducer
+  userPacakgePlan: userPackagePlanReducer,
+  aiPreviousChats : previousChatSlice
 });
 
 export default reducer;

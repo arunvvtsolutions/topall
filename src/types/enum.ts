@@ -205,6 +205,9 @@ const enum Apipoint {
   aiChatWiseAiBot = 'ai/chatWiseAiBot',
   aiBots ='aiBot/list',
   aiBotAnswerByThreadId ='ai',
+  aiPreviousChatHistory = 'ai/getChatHistory',
+  //ai token
+  aiToken = 'aiToken',
 }
 
 export default Apipoint;

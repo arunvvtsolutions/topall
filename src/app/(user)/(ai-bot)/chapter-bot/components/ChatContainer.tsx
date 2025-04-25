@@ -8,9 +8,10 @@ import ChatInput from './ChatInput';
 import { BOT_TYPE } from '@/utils/api/ai-doubt-module-dummy';
 import { toast } from '@/components/ui/use-toast';
 import { AI } from '../[...shortUrls]/page';
-import { getAiBotAnswerByThreadId,postChapterWiseAiBot,postCommonBot } from '@/utils/api/ai';
+import { getAiBotAnswerByThreadId, postChapterWiseAiBot, postCommonBot } from '@/utils/api/ai';
 import { RootState, useSelector } from '@/store';
 import { getAiBotsList } from '@/utils/api/ai/ai-bots';
+import { getAiTokenById } from '@/utils/api/ai/ai-token';
 
 interface ChatContainerProps {
   threadId?: string;
@@ -19,8 +20,8 @@ interface ChatContainerProps {
   placeholder?: string;
   welcomeMessage?: string;
   params: any;
-  subjectId?:number;
-  chapterId?:number;
+  subjectId?: number;
+  chapterId?: number;
 }
 
 interface Message {
@@ -66,6 +67,16 @@ interface IAiBotProps {
   id: number;
   botName: string;
   botType: number;
+  textPromptCredits: number;
+  imagePromptCredits: number;
+}
+interface IAiTokenProps {
+  id: number;
+  userId: number;
+  totalTokens: number;
+  remainingTokens: number;
+  createdDate: string;
+  updatedDate: string;
 }
 export default function ChatContainer({
   threadId: initialThreadId,
@@ -75,7 +86,7 @@ export default function ChatContainer({
   welcomeMessage,
   params,
   chapterId,
-  subjectId,
+  subjectId
 }: ChatContainerProps) {
   const { userId } = useSelector((state: RootState) => state.userProfile);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -84,10 +95,30 @@ export default function ChatContainer({
   const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
   const [tokenCount, setTokenCount] = useState<number>(100);
   const [lastMsg, setLastMsg] = useState<string>('');
-  const [currentThreadId, setCurrentThreadId] = useState<string>(initialThreadId || `${AI.THREAD_KEY}-${uuidv4().substring(0, 21)}`);
-  
-  console.log(params, 'params');
-  
+  const [tokenDetails, setTokenDetails] = useState<IAiTokenProps>();
+  const [currentThreadId, setCurrentThreadId] = useState<string>(
+    initialThreadId || `${AI.THREAD_KEY}-${uuidv4().substring(0, 21)}`
+  );
+
+  console.log(tokenDetails, 'tokenDetails');
+  const fetchAiTokenByUserId = useCallback(async (userId: number) => {
+    try {
+      const res: IAiTokenProps = await getAiTokenById(userId);
+      if (res) {
+        setTokenDetails(res);
+      }
+      console.log(res, 'token details');
+    } catch (error) {
+      console.error('Error fetching AI token:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetchAiTokenByUserId(userId);
+    }
+  }, [userId, fetchAiTokenByUserId]);
+
   useEffect(() => {
     const fetchAiBots = async () => {
       try {
@@ -202,8 +233,7 @@ export default function ChatContainer({
           userId,
           history: lastMsg,
           threadId: currentThreadId,
-          botType,
-          
+          botType
         };
 
         let apiResponse;
@@ -216,7 +246,7 @@ export default function ChatContainer({
             apiResponse = await postChapterWiseAiBot({
               ...commonRequestData,
               chapterId,
-              subjectId,
+              subjectId
             });
             break;
 
@@ -269,35 +299,36 @@ export default function ChatContainer({
     [botType, getRandomResponse]
   );
 
-  const handleResponse = useCallback((result: any, threadId: string) => {
-    if (result.success) {
-      setMessages((prev) =>
-        prev.map((msg) => (msg.loading && msg.threadId === threadId ? { ...msg, loading: false, isTyping: true } : msg))
-      );
+  const handleResponse = useCallback(
+    async (result: any, threadId: string) => {
+      if (result.success) {
+        setMessages((prev) => prev.filter((msg) => !msg.loading));
 
-      setTimeout(() => {
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.isTyping && msg.threadId === threadId
-              ? {
-                  ...msg,
-                  content: result.data.answer,
-                  isTyping: false
-                }
-              : msg
-          )
-        );
-        setLastMsg(result.data.history || '');
-      }, 1000);
-    } else {
-      toast({
-        title: 'Error',
-        description: 'Failed to get a response. Please try again.',
-        variant: 'destructive'
-      });
-      setMessages((prev) => prev.filter((msg) => !msg.loading));
-    }
-  }, []);
+        const assistantMessage: Message = {
+          id: uuidv4(),
+          content: result.data.answer,
+          role: 'assistant',
+          threadId
+        };
+
+        setMessages((prev) => [...prev, assistantMessage]);
+        setLastMsg(result.data.answer);
+
+        // Update token count after successful response
+        if (userId) {
+          await fetchAiTokenByUserId(userId);
+        }
+      } else {
+        toast({
+          title: 'Error',
+          description: result.message || 'Failed to get a response. Please try again.',
+          variant: 'destructive'
+        });
+        setMessages((prev) => prev.filter((msg) => !msg.loading));
+      }
+    },
+    [userId, fetchAiTokenByUserId]
+  );
 
   const handleSendMessage = useCallback(
     async (content: string) => {
@@ -352,6 +383,9 @@ export default function ChatContainer({
   );
 
   const handleNewChat = useCallback(() => {
+    // Only proceed if there are messages
+    if (messages.length === 0) return;
+
     setIsLoading(false);
     setActiveMessageId(null);
     setLastMsg('');
@@ -373,13 +407,15 @@ export default function ChatContainer({
     }
 
     setTokenCount(100);
+
+    // Update URL with new thread ID
     const pathname = window.location.pathname;
     const basePathname = pathname
       .split('/')
       .filter((part) => !part.startsWith(AI.THREAD_KEY))
       .join('/');
-    window.history.pushState({}, '', basePathname);
-  }, [welcomeMessage]);
+    window.history.pushState({}, '', `${basePathname}/${newThreadId}`);
+  }, [welcomeMessage, messages.length]);
 
   const isChatLoading = useMemo(() => isLoading || activeMessageId !== null, [isLoading, activeMessageId]);
   const chatTitle = title || 'AI Assistant';
@@ -388,7 +424,7 @@ export default function ChatContainer({
   return (
     <div className="flex items-center justify-center">
       <div className="flex h-[90vh] w-[90%] max-w-[1000px] flex-col">
-        <Header title={chatTitle} onNewChat={handleNewChat} />
+        <Header title={chatTitle} onNewChat={handleNewChat} disableNewChat={messages.length === 0} />
         <div className="relative flex-1 overflow-hidden">
           <MessageList messages={messages} isLoading={isLoading} />
         </div>
@@ -402,7 +438,7 @@ export default function ChatContainer({
           <div className="mt-[5px] w-full">
             <p className="text-center !text-[14px]">
               <span className="block text-[12px] text-[#8B8B8B]">Our bots make mistakes. Double-check important details.</span>
-              {AI.TOKEN_COUNT} <span className="font-bold">{tokenCount}</span>
+              {AI.TOKEN_COUNT} <span className="font-bold">{tokenDetails?.remainingTokens}</span>
             </p>
           </div>
         </div>

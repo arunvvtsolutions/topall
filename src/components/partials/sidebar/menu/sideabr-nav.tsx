@@ -14,6 +14,8 @@ import TeamSwitcher from '../common/team-switcher';
 import SearchBar from '../common/search-bar';
 import { getLangDir } from 'rtl-detect';
 import Link from 'next/link';
+import { RootState, useSelector } from '@/store';
+import PreviousChatHistory from './ai/PreviousChatHistory';
 
 const SidebarNav = ({ menuList }: { menuList: Group[] }) => {
   const [config, setConfig] = useConfig();
@@ -22,7 +24,8 @@ const SidebarNav = ({ menuList }: { menuList: Group[] }) => {
   const direction = getLangDir(params?.locale ?? '');
   const activeKey = pathname?.split('/')?.[2];
   const data = menuList.find((item) => item.id === activeKey);
-
+  
+  
   // Render null if config.subMenu is true
   if (config.subMenu || !config.hasSubMenu) {
     return null;
@@ -47,6 +50,7 @@ const SidebarNav = ({ menuList }: { menuList: Group[] }) => {
             <MenuLabel label={data?.groupLabel} className="py-0 text-xl font-semibold capitalize text-default" />
           )}
         </div>
+        
         <nav className="mt-6 h-full w-full">
           <ul className="flex h-full flex-col items-start space-y-1.5 px-4 pb-8">
             {data?.menus.map(({ submenus }, index) =>

@@ -36,6 +36,7 @@ import { setStreamSelectionSuccess } from '@/store/slice/user/stream-slice';
 import { toast } from 'sonner';
 import { setUserProfileSuccess } from '@/store/slice/user/userProfileSlice';
 import { Roles, TosterMessages } from '@/types/enum';
+import PreviousChatHistory from './ai/PreviousChatHistory';
 
 export function MenuClassic() {
   const [shortNames, setShortNames] = React.useState<string[]>([]);
@@ -172,6 +173,9 @@ export function MenuClassic() {
           </div>
         )} */}
       <ScrollArea className="h-full [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar]:w-8 [&>div>div[style]]:!block">
+        <div className="px-4 py-2">
+          <PreviousChatHistory />
+        </div>
         <nav className={`${collapsed ? 'mt-[42px]' : 'mt-4'} h-full w-full`}>
           <ul className="flex h-full min-h-[calc(100vh-48px-36px-16px-32px)] flex-col items-start space-y-1 px-4 lg:min-h-[calc(100vh-32px-40px-32px)]">
             {menuList?.map(({ groupLabel, menus }, index) => (
