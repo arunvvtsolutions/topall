@@ -1,0 +1,112 @@
+[
+    {
+      "sNo": 1,
+      "stream": "Science",
+      "level": "1",
+      "daysBenefited": 180,
+      "testsBenefited": 20,
+      "startDate": "2024-01-01",
+      "endDate": "2024-06-30",
+      "status": "Active",
+      "action": true
+    },
+    {
+      "sNo": 2,
+      "stream": "Commerce",
+      "level": "2",
+      "daysBenefited": 150,
+      "testsBenefited": 15,
+      "startDate": "2024-02-01",
+      "endDate": "2024-07-30",
+      "status": "Active",
+      "action": true
+    },
+    {
+      "sNo": 3,
+      "stream": "Arts",
+      "level": "1",
+      "daysBenefited": 120,
+      "testsBenefited": 10,
+      "startDate": "2024-03-01",
+      "endDate": "2024-08-30",
+      "status": "Active",
+      "action": true
+    },
+    {
+      "sNo": 4,
+      "stream": "Engineering",
+      "level": "3",
+      "daysBenefited": 200,
+      "testsBenefited": 25,
+      "startDate": "2024-04-01",
+      "endDate": "2024-09-30",
+      "status": "Active",
+      "action": true
+    },
+    {
+      "sNo": 5,
+      "stream": "Medical",
+      "level": "2",
+      "daysBenefited": 365,
+      "testsBenefited": 50,
+      "startDate": "2024-05-01",
+      "endDate": "2025-05-01",
+      "status": "Active",
+      "action": true
+    },
+    {
+      "sNo": 6,
+      "stream": "Science",
+      "level": "2",
+      "daysBenefited": 180,
+      "testsBenefited": 20,
+      "startDate": "2024-01-01",
+      "endDate": "2024-06-30",
+      "status": "Active",
+      "action": true
+    },
+    {
+      "sNo": 7,
+      "stream": "Commerce",
+      "level": "3",
+      "daysBenefited": 150,
+      "testsBenefited": 15,
+      "startDate": "2024-02-01",
+      "endDate": "2024-07-30",
+      "status": "Active",
+      "action": true
+    },
+    {
+      "sNo": 8,
+      "stream": "Arts",
+      "level": "1",
+      "daysBenefited": 120,
+      "testsBenefited": 10,
+      "startDate": "2024-03-01",
+      "endDate": "2024-08-30",
+      "status": "Active",
+      "action": true
+    },
+    {
+      "sNo": 9,
+      "stream": "Engineering",
+      "level": "3",
+      "daysBenefited": 200,
+      "testsBenefited": 25,
+      "startDate": "2024-04-01",
+      "endDate": "2024-09-30",
+      "status": "Active",
+      "action": true
+    },
+    {
+      "sNo": 10,
+      "stream": "Medical",
+      "level": "2",
+      "daysBenefited": 365,
+      "testsBenefited": 50,
+      "startDate": "2024-05-01",
+      "endDate": "2025-05-01",
+      "status": "Active",
+      "action": true
+    }
+  ]

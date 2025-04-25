@@ -1,0 +1,81 @@
+{
+  "plugins": ["prettier", "@typescript-eslint/eslint-plugin", "unused-imports", "import"],
+  "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module",
+    "createDefaultProgram": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "src/"]
+      },
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  },
+  "ignorePatterns": [".eslintrc"],
+  "rules": {
+    "react/jsx-filename-extension": "off",
+    "no-param-reassign": "off",
+    "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "react/no-array-index-key": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-console": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "import/no-cycle": "off",
+    "prefer-destructuring": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/display-name": "off",
+    "unused-imports/no-unused-imports": "error",
+    "import/no-unresolved": ["off", { "caseSensitive": false }],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["@mui/*/*/*", "!@mui/material/test-utils/*"]
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "none"
+      }
+    ],
+    "import/order": [
+      "warn",
+      {
+        "newlines-between": "always"
+      }
+    ],
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": ["var", "const", "function", "class"],
+        "next": ["if", "while", "function"]
+      }
+    ],
+    "prettier/prettier": [
+      "warn",
+      {
+        "bracketSpacing": true,
+        "printWidth": 120,
+        "singleQuote": true,
+        "trailingComma": "none",
+        "tabWidth": 2,
+        "useTabs": false,
+        "endOfLine": "auto",
+        "importOrder": ["^components/(.*)$", "^[./]"],
+        "importOrderSeparation": true,
+        "importOrderSortSpecifiers": true
+      }
+    ]
+  }
+}

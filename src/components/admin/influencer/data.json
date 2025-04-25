@@ -1,0 +1,83 @@
+[
+    {
+      "imageUrl": "https://picsum.photos/id/870/200/300?grayscale&blur=2",
+      "name": "Kirubha",
+      "id": "#TOPALL567",
+      "price": "76,969",
+      "people": "6,391,239",
+      "socialMedia": ["YouTube", "Instagram"]
+    },
+    {
+      "imageUrl": "https://picsum.photos/id/1005/200/300",
+      "name": "Aarav",
+      "id": "#TOPALL568",
+      "price": "45,678",
+      "people": "1,234,567",
+      "socialMedia": ["Instagram"]
+    },
+    {
+      "imageUrl": "https://picsum.photos/id/1025/200/300",
+      "name": "Neha",
+      "id": "#TOPALL569",
+      "price": "99,887",
+      "people": "8,765,432",
+      "socialMedia": [ "YouTube"]
+    },
+    {
+      "imageUrl": "https://picsum.photos/id/1035/200/300",
+      "name": "Rohan",
+      "id": "#TOPALL570",
+      "price": "67,890",
+      "people": "3,456,789",
+      "socialMedia": ["YouTube", "Instagram"]
+    },
+    {
+      "imageUrl": "https://picsum.photos/id/1045/200/300",
+      "name": "Divya",
+      "id": "#TOPALL571",
+      "price": "87,654",
+      "people": "2,345,678",
+      "socialMedia": ["Instagram"]
+    },
+    {
+      "imageUrl": "https://picsum.photos/id/1055/200/300",
+      "name": "Sanjay",
+      "id": "#TOPALL572",
+      "price": "54,321",
+      "people": "9,876,543",
+      "socialMedia": ["Instagram"]
+    },
+    {
+      "imageUrl": "https://picsum.photos/id/1065/200/300",
+      "name": "Meera",
+      "id": "#TOPALL573",
+      "price": "23,456",
+      "people": "7,654,321",
+      "socialMedia": ["YouTube", "Instagram"]
+    },
+    {
+      "imageUrl": "https://picsum.photos/id/1075/200/300",
+      "name": "Arjun",
+      "id": "#TOPALL574",
+      "price": "98,765",
+      "people": "8,765,432",
+      "socialMedia": ["YouTube"]
+    },
+    {
+      "imageUrl": "https://picsum.photos/id/1075/200/300",
+      "name": "Priya",
+      "id": "#TOPALL575",
+      "price": "11,223",
+      "people": "5,544,332",
+      "socialMedia": ["Instagram"]
+    },
+    {
+      "imageUrl": "https://picsum.photos/id/1075/200/300",
+      "name": "Vikram",
+      "id": "#TOPALL576",
+      "price": "66,778",
+      "people": "9,988,776",
+      "socialMedia": ["YouTube"]
+    }
+  ]
+  

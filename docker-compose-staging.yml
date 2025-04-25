@@ -1,0 +1,14 @@
+version: '3.2'
+services:
+    dev:
+        build:
+            context: .
+            dockerfile: Dockerfile_Staging
+        container_name: TopAll_B2C_V2_UI_Staging
+        ports:
+            - '3000:80'
+        environment:
+            - NEXTAUTH_SECRET='k4eqoc3EKTWg4dbXw5S/in2z33FX/NotZS42mRN3mnc='
+            - JWT_SECRET='123456'
+        network_mode: 'bridge'
+        restart: unless-stopped

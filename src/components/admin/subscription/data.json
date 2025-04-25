@@ -1,0 +1,29 @@
+[
+    {
+      "examName": "JEE MAINS",
+      "targetYear": "2025",
+      "planName": "Platinum Plan",
+      "price": "678",
+      "expiryDate": "Tuesday, December 31 2026",
+      "notificationCount": 3,
+      "active": true
+    },
+    {
+      "examName": "NEET",
+      "targetYear": "2026",
+      "planName": "Gold Plan",
+      "price": "899",
+      "expiryDate": "Wednesday, June 30 2027",
+      "notificationCount": 1,
+      "active": false
+    },
+    {
+      "examName": "JEE ADVANCED",
+      "targetYear": "2026",
+      "planName": "Diamond Plan",
+      "price": "999",
+      "expiryDate": "Saturday, May 20 2028",
+      "notificationCount": 5,
+      "active": true
+    }
+  ]
