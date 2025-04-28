@@ -52,6 +52,8 @@ export function ChapterWiseBotTabs({ subjectName }: { subjectName: string }) {
   const [standardList, setStandardList] = useState<ICourseProps[]>([]);
   const [filteredStandard, setFilteredStandard] = useState<ICourseProps>();
 
+  console.log(userSubjects, 'user subjects');
+  
   const router = useRouter();
   const pathname = usePathname();
 

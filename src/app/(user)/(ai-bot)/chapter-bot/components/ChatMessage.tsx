@@ -4,12 +4,15 @@ import React, { useState, useEffect } from 'react'
 import { Message } from './types'
 import MarkdownForBot from './ReactMarkDown'
 
+const DEFAULT_TYPING_SPEED = 5 // ms; lower value = faster typing
+
 interface ChatMessageProps {
   message: Message
   isTyping?: boolean
+  typingSpeed?: number
 }
 
-export default function ChatMessage({ message, isTyping = false }: ChatMessageProps) {
+export default function ChatMessage({ message, isTyping = false, typingSpeed = DEFAULT_TYPING_SPEED }: ChatMessageProps) {
   const isUser = message.role === 'user'
   const [displayedContent, setDisplayedContent] = useState('')
   const [isComplete, setIsComplete] = useState(isUser) // User messages don't animate
@@ -31,7 +34,7 @@ export default function ChatMessage({ message, isTyping = false }: ChatMessagePr
           clearInterval(interval)
           setIsComplete(true)
         }
-      }, 15) // Speed of typing animation
+      }, typingSpeed) // Speed of typing animation
       
       // Force a scroll update after each character is added
       document.dispatchEvent(new CustomEvent('scrollToBottom'))
@@ -41,23 +44,31 @@ export default function ChatMessage({ message, isTyping = false }: ChatMessagePr
       setDisplayedContent(message.content)
       setIsComplete(true)
     }
-  }, [message.content, isUser, isTyping])
+  }, [message.content, isUser, isTyping, typingSpeed])
 
   return (
     <div
       className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
     >
       <div
-        className={`max-w-[80%] rounded-lg px-4 py-2 ${isUser ? 'bg-[#f8f8f8] ' : 'bg-white '}`}
+        className={`max-w-[80%] rounded-lg px-4 py-2 ${isUser ? 'bg-[#ebebeb] ' : ' '}`}
       >
         {isUser ? (
           <p className="whitespace-pre-wrap">{displayedContent}</p>
         ) : (
           <MarkdownForBot content={displayedContent} />
         )}
-        {!isComplete && (
-          <span className="inline-block animate-pulse ml-1">▋</span>
-        )}
+        {/* {!isComplete && (
+          <div className="flex items-center ml-1 space-x-1">
+            {[0, 1, 2].map((dot) => (
+              <span
+                key={dot}
+                className="inline-block bg-gray-400 rounded-full w-1.5 h-1.5 animate-pulse"
+                style={{ animationDelay: `${dot * 200}ms` }}
+              />
+            ))}
+          </div>
+        )} */}
       </div>
     </div>
   )

@@ -6,6 +6,7 @@ import ChatMessage from './ChatMessage';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutoScroll } from './useScrollToBottom';
 import CardGrid from '../../doubt-ai/components/ai-prompt-card';
+import { ArrowDown, ArrowDownAZ } from 'lucide-react';
 
 interface PromptCard {
   id: number;
@@ -25,6 +26,8 @@ export default function MessageList({ messages, isLoading, prompts ,onSendMessag
   const { scrollRef, scrollToBottom, handleScroll: autoScrollHandler } = useAutoScroll([messages]);
   const [showScrollButton, setShowScrollButton] = useState(false);
 
+  console.log("messages",messages);
+  
   // Handle scroll events to show/hide scroll button
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     autoScrollHandler();
@@ -62,21 +65,11 @@ export default function MessageList({ messages, isLoading, prompts ,onSendMessag
 
       {showScrollButton && (
         <button
-          className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 transform items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-white shadow-lg transition-all hover:bg-blue-700"
+          className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 transform items-center gap-2 rounded-full px-2 border bg-[#dbdbdb]  py-1 text-black shadow-2xl transition-all "
           onClick={() => scrollToBottom(true)}
           aria-label="Scroll to new messages"
         >
-          <span className="text-sm font-medium">New messages</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="h-4 w-4"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-          </svg>
+          <ArrowDown className='text-[#535353] w-5'/>
         </button>
       )}
     </div>

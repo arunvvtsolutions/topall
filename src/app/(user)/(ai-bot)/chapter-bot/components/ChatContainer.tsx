@@ -7,12 +7,13 @@ import MessageList from './MessageList';
 import ChatInput from './ChatInput';
 import { BOT_TYPE } from '@/utils/api/ai-doubt-module-dummy';
 import { toast } from '@/components/ui/use-toast';
-import { AI } from '../[...shortUrls]/page';
 import { getAiBotAnswerByThreadId,postChapterWiseAiBot, postDoubtAiBot } from '@/utils/api/ai';
-import { RootState, useSelector } from '@/store';
+import { RootState, useDispatch, useSelector } from '@/store';
 import { getAiBotsList } from '@/utils/api/ai/ai-bots';
 import { getAiTokenById } from '@/utils/api/ai/ai-token';
-
+import { addChatHistoryItem, setChatHistory } from '@/store/slice/ai/previousChatSlice';
+import { useRouter } from 'next/navigation';
+import { AI } from './types';
 
 interface PromptCard {
   id: number;
@@ -99,7 +100,10 @@ export default function ChatContainer({
   subjectId,
   prompts
 }: ChatContainerProps) {
-  const { userId } = useSelector((state: RootState) => state.userProfile);
+  const { userId, standard } = useSelector((state: RootState) => state.userProfile);
+  const { standards } = useSelector((state: RootState) => state.selectors);
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<ImageFileProps>({});
@@ -147,7 +151,7 @@ export default function ChatContainer({
         .split('/')
         .filter((part) => !part.startsWith(AI.THREAD_KEY))
         .join('/');
-      window.history.pushState({}, '', `${basePathname}/${currentThreadId}`);
+      router.push(`${basePathname}/${currentThreadId}`);
     }
   }, [currentThreadId, initialThreadId]);
   useEffect(() => {
@@ -319,7 +323,8 @@ export default function ChatContainer({
           id: uuidv4(),
           content: result.data.answer,
           role: 'assistant',
-          threadId
+          threadId,
+          isTyping: true
         };
 
         setMessages((prev) => [...prev, assistantMessage]);
@@ -355,7 +360,7 @@ export default function ChatContainer({
             .split('/')
             .filter((part) => !part.startsWith(AI.THREAD_KEY))
             .join('/');
-          window.history.pushState({}, '', `${basePathname}/${threadId}`);
+          router.push(`${basePathname}/${threadId}`);
         }
 
         const userMessage = createNewChat(content, imageFile, threadId);
@@ -392,7 +397,7 @@ export default function ChatContainer({
     },
     [imageFile, currentThreadId, createNewChat, getAiResponse, handleResponse]
   );
-
+//  dispatch(addChatHistoryItem());
   const handleNewChat = useCallback(() => {
     // Only proceed if there are messages
     if (messages.length === 0) return;
@@ -425,7 +430,7 @@ export default function ChatContainer({
       .split('/')
       .filter((part) => !part.startsWith(AI.THREAD_KEY))
       .join('/');
-    window.history.pushState({}, '', `${basePathname}/${newThreadId}`);
+    router.push(`${basePathname}/${newThreadId}`);
   }, [welcomeMessage, messages.length]);
 
   const isChatLoading = useMemo(() => isLoading || activeMessageId !== null, [isLoading, activeMessageId]);
