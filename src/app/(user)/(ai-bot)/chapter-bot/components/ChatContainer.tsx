@@ -117,7 +117,7 @@ export default function ChatContainer({
 
   const fetchAiTokenByUserId = useCallback(async (userId: number) => {
     try {
-      const res: IAiTokenProps = await getAiTokenById(userId);
+      const res: IAiTokenProps = await getAiTokenById(userId);      
       if (res) {
         setTokenDetails(res);
       }

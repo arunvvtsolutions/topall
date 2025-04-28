@@ -6,36 +6,35 @@ import { getCommonAiPrompts } from "@/utils/api/ai/ai-bots";
 
 
 export default function Page({ params }: { params: { shortUrls: string[] } }) {
-  const [prompts, setPrompts] = useState<any[]>([]); // State to hold AI prompts
-  const [loading, setLoading] = useState(true); // State to track loading status
-  const [error, setError] = useState<string | null>(null); // State for errors
+  const [prompts, setPrompts] = useState<any[]>([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState<string | null>(null); 
 
   const threadId = params.shortUrls?.find((para) => 
     para.startsWith(AI.THREAD_KEY) || para.startsWith('CS-')
   );
 
   useEffect(() => {
-    // Fetch the common AI prompts
     const fetchPrompts = async () => {
       try {
         const fetchedPrompts = await getCommonAiPrompts(BOT_TYPE.COMMON_BOT);
-        setPrompts(fetchedPrompts); // Set the prompts in state
+        setPrompts(fetchedPrompts); 
       } catch (err) {
-        setError("Failed to load prompts."); // Handle error
+        setError("Failed to load prompts."); 
       } finally {
-        setLoading(false); // Set loading to false once the request is complete
+        setLoading(false); 
       }
     };
 
     fetchPrompts();
-  }, []); // Empty dependency array means this runs only once on component mount
+  }, []); 
     
   if (loading) {
-    return <div>Loading...</div>; // Loading state
+    return <div>Loading...</div>; 
   }
 
   if (error) {
-    return <div>{error}</div>; // Error state
+    return <div>{error}</div>; 
   }
 
   return <ChatContainer botType={BOT_TYPE.COMMON_BOT} params={params} threadId={threadId} prompts={prompts} />;

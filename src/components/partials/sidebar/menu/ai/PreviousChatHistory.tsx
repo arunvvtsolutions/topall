@@ -168,8 +168,8 @@ const PreviousChatHistory = () => {
         }
         break;
 
-      case 3: // Career Bot
-        url = `/career-bot/${threadId}`;
+      case 1: // Career Bot
+        url = `/doubt-ai/${threadId}`;
         break;
 
       case 4: // Topic Bot
