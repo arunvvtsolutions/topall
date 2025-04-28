@@ -7,11 +7,11 @@ import MessageList from './MessageList';
 import ChatInput from './ChatInput';
 import { BOT_TYPE } from '@/utils/api/ai-doubt-module-dummy';
 import { toast } from '@/components/ui/use-toast';
-import { AI } from '../[...shortUrls]/page';
 import { getAiBotAnswerByThreadId, postChapterWiseAiBot, postCommonBot } from '@/utils/api/ai';
 import { RootState, useSelector } from '@/store';
 import { getAiBotsList } from '@/utils/api/ai/ai-bots';
 import { getAiTokenById } from '@/utils/api/ai/ai-token';
+import { AI } from './types';
 
 interface ChatContainerProps {
   threadId?: string;
@@ -67,6 +67,7 @@ interface IAiBotProps {
   id: number;
   botName: string;
   botType: number;
+  shortUrl : string;
   textPromptCredits: number;
   imagePromptCredits: number;
 }
@@ -99,7 +100,7 @@ export default function ChatContainer({
   const [currentThreadId, setCurrentThreadId] = useState<string>(
     initialThreadId || `${AI.THREAD_KEY}-${uuidv4().substring(0, 21)}`
   );
-
+  
   console.log(tokenDetails, 'tokenDetails');
   const fetchAiTokenByUserId = useCallback(async (userId: number) => {
     try {
