@@ -1,0 +1,159 @@
+{
+  "subjects": [
+    {
+      "id": 1,
+      "name": "BIOLOGY",
+      "image_file": "",
+      "description": "",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 2,
+      "name": "BOTANY",
+      "image_file": "",
+      "description": "",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 3,
+      "name": "ZOOLOGY",
+      "image_file": "",
+      "description": "",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 4,
+      "name": "PHYSICS",
+      "image_file": "",
+      "description": "",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 5,
+      "name": "CHEMISTRY",
+      "image_file": "",
+      "description": "",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 6,
+      "name": "MATHEMATICS",
+      "image_file": "",
+      "description": "",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 7,
+      "name": "SCIENCE",
+      "image_file": "",
+      "description": "",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 8,
+      "name": "SOCIAL_STUDIES",
+      "image_file": "",
+      "description": "",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 9,
+      "name": "TEST-SUBJECT-1",
+      "image_file": "",
+      "description": "test",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 10,
+      "name": "TEST-1",
+      "image_file": "",
+      "description": "test",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "id": 12,
+      "name": "TEST-SUBJECT-2",
+      "image_file": "",
+      "description": "test-subject-2",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": true
+    },
+    {
+      "id": 13,
+      "name": "TEST-SUBJECT-3",
+      "image_file": "",
+      "description": "subject",
+      "sequemce": 0,
+      "is_active": true,
+      "is_deleted": false
+    }
+  ],
+  "academicYear": [
+    {
+      "id": 1,
+      "stream": "JEE-MAINS",
+      "streamId": 2,
+      "standards": "-",
+      "standardId": null,
+      "startDate": "2024-12-21",
+      "endDate": "2025-07-08"
+    },
+    {
+      "id": 2,
+      "stream": "NEET",
+      "streamId": 1,
+      "standards": "-",
+      "standardId": null,
+      "startDate": "2024-10-30",
+      "endDate": "2025-01-08"
+    },
+    {
+      "id": 3,
+      "stream": "JEE MAINS",
+      "streamId": 2,
+      "standards": "-",
+      "standardId": null,
+      "startDate": "2024-06-09",
+      "endDate": "2025-05-08"
+    },
+    {
+      "id": 4,
+      "stream": "NEET",
+      "streamId": 1,
+      "standards": "-",
+      "standardId": null,
+      "startDate": "2024-06-09",
+      "endDate": "2025-05-05"
+    },
+    {
+      "id": 6,
+      "stream": "CBSE",
+      "streamId": null,
+      "standards": "Class 10",
+      "standardId": null,
+      "startDate": "2024-06-06",
+      "endDate": "2025-05-08"
+    }
+  ]
+}

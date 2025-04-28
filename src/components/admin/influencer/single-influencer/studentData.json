@@ -1,0 +1,129 @@
+[
+    {
+      "id": "STU12345",
+      "device": "Desktop",
+      "studentName": "Kirubha",
+      "testsTaken": 1,
+      "questions": 1000,
+      "lastSeen": "28/11/24, 10:00PM",
+      "status": "Active"
+    },
+    {
+      "id": "STU12346",
+      "device": "Laptop",
+      "studentName": "Aisha Sharma",
+      "testsTaken": 3,
+      "questions": 1500,
+      "lastSeen": "01/12/24, 09:30PM",
+      "status": "Inactive"
+    },
+    {
+      "id": "STU12347",
+      "device": "Mobile",
+      "studentName": "Rohan Patel",
+      "testsTaken": 5,
+      "questions": 2000,
+      "lastSeen": "05/12/24, 08:45PM",
+      "status": "Active"
+    },
+    {
+      "id": "STU12348",
+      "device": "Tablet",
+      "studentName": "Maya Kapoor",
+      "testsTaken": 2,
+      "questions": 1200,
+      "lastSeen": "10/12/24, 07:15PM",
+      "status": "Inactive"
+    },
+    {
+      "id": "STU12349",
+      "device": "Mobile",
+      "studentName": "Vikram Singh",
+      "testsTaken": 4,
+      "questions": 1800,
+      "lastSeen": "12/12/24, 06:30PM",
+      "status": "Active"
+    },
+    {
+      "id": "STU12350",
+      "device": "Desktop",
+      "studentName": "Neha Agarwal",
+      "testsTaken": 6,
+      "questions": 2100,
+      "lastSeen": "15/12/24, 04:00PM",
+      "status": "Active"
+    },
+    {
+      "id": "STU12351",
+      "device": "Laptop",
+      "studentName": "Siddharth Mehta",
+      "testsTaken": 3,
+      "questions": 1600,
+      "lastSeen": "17/12/24, 08:15AM",
+      "status": "Inactive"
+    },
+    {
+      "id": "STU12352",
+      "device": "Tablet",
+      "studentName": "Pooja Desai",
+      "testsTaken": 5,
+      "questions": 1900,
+      "lastSeen": "20/12/24, 05:45PM",
+      "status": "Active"
+    },
+    {
+      "id": "STU12353",
+      "device": "Mobile",
+      "studentName": "Rahul Verma",
+      "testsTaken": 2,
+      "questions": 1100,
+      "lastSeen": "22/12/24, 02:20PM",
+      "status": "Inactive"
+    },
+    {
+      "id": "STU12354",
+      "device": "Desktop",
+      "studentName": "Ananya Nair",
+      "testsTaken": 7,
+      "questions": 2300,
+      "lastSeen": "25/12/24, 10:10AM",
+      "status": "Active"
+    },
+    {
+      "id": "STU12355",
+      "device": "Laptop",
+      "studentName": "Kunal Joshi",
+      "testsTaken": 3,
+      "questions": 1400,
+      "lastSeen": "28/12/24, 11:00PM",
+      "status": "Inactive"
+    },
+    {
+      "id": "STU12356",
+      "device": "Tablet",
+      "studentName": "Simran Malhotra",
+      "testsTaken": 5,
+      "questions": 1700,
+      "lastSeen": "30/12/24, 01:00PM",
+      "status": "Active"
+    },
+    {
+      "id": "STU12357",
+      "device": "Mobile",
+      "studentName": "Deepak Kumar",
+      "testsTaken": 4,
+      "questions": 2000,
+      "lastSeen": "02/01/25, 05:30PM",
+      "status": "Inactive"
+    },
+    {
+      "id": "STU12358",
+      "device": "Desktop",
+      "studentName": "Priya Reddy",
+      "testsTaken": 6,
+      "questions": 2200,
+      "lastSeen": "05/01/25, 03:15PM",
+      "status": "Active"
+    }
+  ]
+  

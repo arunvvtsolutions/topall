@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/vvts-code-deploy/topall_b2c_v2_ui
+
+hooks:
+  ApplicationStart:
+    - location: deploy_scripts/application-start.s
+      timeout: 300

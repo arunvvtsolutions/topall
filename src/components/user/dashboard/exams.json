@@ -1,0 +1,71 @@
+[
+  {
+    "id": 1,
+    "name": "all india mock test",
+    "startDate": "",
+    "subjects": [
+      {
+        "id": 1,
+        "name": "botany"
+      },
+      {
+        "id": 2,
+        "name": "zoology"
+      },
+      {
+        "id": 3,
+        "name": "physics"
+      },
+      {
+        "id": 3,
+        "name": "chemistry"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "previous year test 01",
+    "startDate": "",
+    "subjects": [
+      {
+        "id": 1,
+        "name": "botany"
+      },
+      {
+        "id": 2,
+        "name": "zoology"
+      },
+      {
+        "id": 3,
+        "name": "physics"
+      },
+      {
+        "id": 3,
+        "name": "Chemistry"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "generate test 01",
+    "startDate": "",
+    "subjects": [
+      {
+        "id": 1,
+        "name": "botany"
+      },
+      {
+        "id": 2,
+        "name": "zoology"
+      },
+      {
+        "id": 3,
+        "name": "physics"
+      },
+      {
+        "id": 3,
+        "name": "chemistry"
+      }
+    ]
+  }
+]
