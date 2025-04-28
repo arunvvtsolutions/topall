@@ -10,3 +10,12 @@ export const getAiBotsList = async () => {
       throw error;
     }
   };
+  export const getCommonAiPrompts = async (botType: number) => {
+    try {
+      // Change the request URL to pass `botType` in the URL path
+      const response = await axios.get(`${API_BASE_URL}/${Apipoint.getAiPrompt}/${botType}`); 
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };

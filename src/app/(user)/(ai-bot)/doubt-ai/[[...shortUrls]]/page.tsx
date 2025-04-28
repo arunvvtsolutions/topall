@@ -1,8 +1,8 @@
 "use client";
-
-import React from "react";
-import ChatContainer from "../components/ChatContainer";
+import React, { useEffect, useState } from "react";
 import { BOT_TYPE } from "@/utils/api/ai-doubt-module-dummy";
+import { ChatContainer } from "../../chapter-bot/components";
+import { getCommonAiPrompts } from "@/utils/api/ai/ai-bots";
 
 export enum AI {
   ERROR_MESSAGE = "I'm sorry, but I'm unable to provide an answer to that question right now. If you have any other questions or need assistance with something else, feel free to ask!",
@@ -29,10 +29,37 @@ export enum AI {
 }
 
 export default function Page({ params }: { params: { shortUrls: string[] } }) {
+  const [prompts, setPrompts] = useState<any[]>([]); // State to hold AI prompts
+  const [loading, setLoading] = useState(true); // State to track loading status
+  const [error, setError] = useState<string | null>(null); // State for errors
+
   const threadId = params.shortUrls?.find((para) => 
     para.startsWith(AI.THREAD_KEY) || para.startsWith('CS-')
   );
-  const subjectId = params.shortUrls?.[0];
-  const chapterId = params.shortUrls?.[1];
-  return <ChatContainer chapterId={Number(chapterId)} subjectId={Number(subjectId)}  botType={BOT_TYPE.ASK_DOUBTS}  params={params} threadId={threadId} />;
+
+  useEffect(() => {
+    // Fetch the common AI prompts
+    const fetchPrompts = async () => {
+      try {
+        const fetchedPrompts = await getCommonAiPrompts(BOT_TYPE.COMMON_BOT);
+        setPrompts(fetchedPrompts); // Set the prompts in state
+      } catch (err) {
+        setError("Failed to load prompts."); // Handle error
+      } finally {
+        setLoading(false); // Set loading to false once the request is complete
+      }
+    };
+
+    fetchPrompts();
+  }, []); // Empty dependency array means this runs only once on component mount
+    
+  if (loading) {
+    return <div>Loading...</div>; // Loading state
+  }
+
+  if (error) {
+    return <div>{error}</div>; // Error state
+  }
+
+  return <ChatContainer botType={BOT_TYPE.COMMON_BOT} params={params} threadId={threadId} prompts={prompts} />;
 }

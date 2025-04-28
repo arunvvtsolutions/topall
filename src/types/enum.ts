@@ -202,12 +202,15 @@ const enum Apipoint {
   getPackagePlan = 'payment/getPackagePlan',
 
   //Ai related below
-  aiChatWiseAiBot = 'ai/chatWiseAiBot',
+  aiChapterModule = 'ai/ChatWiseAiBot',
+  aiDoubtModule = 'ai/doubt-ai',
   aiBots ='aiBot/list',
   aiBotAnswerByThreadId ='ai',
+  getAiPrompt = 'ai/getAiPropmt',
   aiPreviousChatHistory = 'ai/getChatHistory',
   //ai token
   aiToken = 'aiToken',
+  
 }
 
 export default Apipoint;

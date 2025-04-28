@@ -5,8 +5,6 @@ export interface ChatItem {
   title: string;
   userId: string;
   botType: string;
-  subjectId?: string | null;
-  chapterId?: string | null;
   threadId: string;
   createdAt?: string;
 }

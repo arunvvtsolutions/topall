@@ -26,9 +26,8 @@ export interface IAiDoubtModuleSendProps {
   subjectId : number;
 }
 export const postChapterWiseAiBot = async (data: IAiDoubtModuleSendProps) => {
-  console.log(data,'hello');
   try {
-    const res = await axios.post(`${API_BASE_URL}/${Apipoint.aiChatWiseAiBot}`, data);
+    const res = await axios.post(`${API_BASE_URL}/${Apipoint.aiChapterModule}`, data);
     return res.data;
   } catch (error: any) {
     console.error('Error posting AI chapter questions:', error);
@@ -36,10 +35,9 @@ export const postChapterWiseAiBot = async (data: IAiDoubtModuleSendProps) => {
   }
 };
 
-export const postCommonBot = async (data: IAiDoubtModuleSendProps) => {
-  console.log(data,'hello');
+export const postDoubtAiBot = async (data: IAiDoubtModuleSendProps) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/${Apipoint.aiChatWiseAiBot}`, data);
+    const res = await axios.post(`${API_BASE_URL}/${Apipoint.aiDoubtModule}`, data);
     return res.data;
   } catch (error: any) {
     console.error('Error posting AI chapter questions:', error);

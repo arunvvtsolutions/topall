@@ -7,11 +7,19 @@ import MessageList from './MessageList';
 import ChatInput from './ChatInput';
 import { BOT_TYPE } from '@/utils/api/ai-doubt-module-dummy';
 import { toast } from '@/components/ui/use-toast';
-import { getAiBotAnswerByThreadId, postChapterWiseAiBot, postCommonBot } from '@/utils/api/ai';
+import { AI } from '../[...shortUrls]/page';
+import { getAiBotAnswerByThreadId,postChapterWiseAiBot, postDoubtAiBot } from '@/utils/api/ai';
 import { RootState, useSelector } from '@/store';
 import { getAiBotsList } from '@/utils/api/ai/ai-bots';
 import { getAiTokenById } from '@/utils/api/ai/ai-token';
-import { AI } from './types';
+
+
+interface PromptCard {
+  id: number;
+  title: string;
+  prompt: string;
+  onSendMessage: (message: string) => void
+}
 
 interface ChatContainerProps {
   threadId?: string;
@@ -22,6 +30,7 @@ interface ChatContainerProps {
   params: any;
   subjectId?: number;
   chapterId?: number;
+  prompts?: PromptCard[]; 
 }
 
 interface Message {
@@ -87,7 +96,8 @@ export default function ChatContainer({
   welcomeMessage,
   params,
   chapterId,
-  subjectId
+  subjectId,
+  prompts
 }: ChatContainerProps) {
   const { userId } = useSelector((state: RootState) => state.userProfile);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -100,8 +110,7 @@ export default function ChatContainer({
   const [currentThreadId, setCurrentThreadId] = useState<string>(
     initialThreadId || `${AI.THREAD_KEY}-${uuidv4().substring(0, 21)}`
   );
-  
-  console.log(tokenDetails, 'tokenDetails');
+
   const fetchAiTokenByUserId = useCallback(async (userId: number) => {
     try {
       const res: IAiTokenProps = await getAiTokenById(userId);
@@ -251,11 +260,12 @@ export default function ChatContainer({
             });
             break;
 
-          case BOT_TYPE.ASK_ADMISSIONS:
-            // apiResponse = await postCommonBot({
-            //   ...commonRequestData,
-            //   chapterId: 0 // Required by IAiDoubtModuleSendProps, using 0 for non-chapter bots
-            // });
+            case BOT_TYPE.COMMON_BOT:
+            apiResponse = await postDoubtAiBot({
+              ...commonRequestData,
+              chapterId: 0 ,// Required by IAiDoubtModuleSendProps, using 0 for non-chapter bots
+              subjectId:0
+            });
             break;
 
           default:
@@ -427,7 +437,7 @@ export default function ChatContainer({
       <div className="flex h-[90vh] w-[90%] max-w-[1000px] flex-col">
         <Header title={chatTitle} onNewChat={handleNewChat} disableNewChat={messages.length === 0} />
         <div className="relative flex-1 overflow-hidden">
-          <MessageList messages={messages} isLoading={isLoading} />
+        <MessageList messages={messages} isLoading={isLoading} prompts={prompts || []} onSendMessage={handleSendMessage} />
         </div>
         <div className="flex-none">
           <ChatInput
