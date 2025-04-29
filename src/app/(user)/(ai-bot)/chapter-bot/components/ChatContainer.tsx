@@ -7,18 +7,18 @@ import MessageList from './MessageList';
 import ChatInput from './ChatInput';
 import { BOT_TYPE } from '@/utils/api/ai-doubt-module-dummy';
 import { toast } from '@/components/ui/use-toast';
-import { getAiBotAnswerByThreadId,postChapterWiseAiBot, postDoubtAiBot } from '@/utils/api/ai';
+import { getAiBotAnswerByThreadId, postChapterWiseAiBot, postDoubtAiBot } from '@/utils/api/ai';
 import { RootState, useDispatch, useSelector } from '@/store';
 import { getAiBotsList } from '@/utils/api/ai/ai-bots';
 import { getAiTokenById } from '@/utils/api/ai/ai-token';
-import { addChatHistoryItem, setChatHistory } from '@/store/slice/ai/previousChatSlice';
+import { addChatHistoryItem, ChatItem, setChatHistory } from '@/store/slice/ai/previousChatSlice';
 import { AI } from './types';
 
 interface PromptCard {
   id: number;
   title: string;
   prompt: string;
-  onSendMessage: (message: string) => void
+  onSendMessage: (message: string) => void;
 }
 
 interface ChatContainerProps {
@@ -30,7 +30,7 @@ interface ChatContainerProps {
   params: any;
   subjectId?: number;
   chapterId?: number;
-  prompts?: PromptCard[]; 
+  prompts?: PromptCard[];
 }
 
 interface Message {
@@ -76,7 +76,7 @@ interface IAiBotProps {
   id: number;
   botName: string;
   botType: number;
-  shortUrl : string;
+  shortUrl: string;
   textPromptCredits: number;
   imagePromptCredits: number;
 }
@@ -102,7 +102,7 @@ export default function ChatContainer({
   const { userId, standard } = useSelector((state: RootState) => state.userProfile);
   const { standards } = useSelector((state: RootState) => state.selectors);
   const dispatch = useDispatch();
-  
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<ImageFileProps>({});
@@ -116,7 +116,7 @@ export default function ChatContainer({
 
   const fetchAiTokenByUserId = useCallback(async (userId: number) => {
     try {
-      const res: IAiTokenProps = await getAiTokenById(userId);      
+      const res: IAiTokenProps = await getAiTokenById(userId);
       if (res) {
         setTokenDetails(res);
       }
@@ -263,11 +263,11 @@ export default function ChatContainer({
             });
             break;
 
-            case BOT_TYPE.COMMON_BOT:
+          case BOT_TYPE.COMMON_BOT:
             apiResponse = await postDoubtAiBot({
               ...commonRequestData,
-              chapterId: 0 ,// Required by IAiDoubtModuleSendProps, using 0 for non-chapter bots
-              subjectId:0
+              chapterId: 0, // Required by IAiDoubtModuleSendProps, using 0 for non-chapter bots
+              subjectId: 0
             });
             break;
 
@@ -283,7 +283,8 @@ export default function ChatContainer({
           data: {
             answer: apiResponse?.result || 'No response available.',
             history: apiResponse?.history || ''
-          }
+          },
+          botData: apiResponse
         };
       } catch (error) {
         console.error('AI Response Error:', error);
@@ -308,6 +309,8 @@ export default function ChatContainer({
   const getAiResponse = useCallback(
     async (message: string) => {
       const response = await getRandomResponse(botType, message);
+      console.log(response);
+
       return response;
     },
     [botType, getRandomResponse]
@@ -329,10 +332,24 @@ export default function ChatContainer({
         setMessages((prev) => [...prev, assistantMessage]);
         setLastMsg(result.data.answer);
 
+        console.log(result);
+
         // Update token count after successful response
         if (userId) {
           await fetchAiTokenByUserId(userId);
         }
+        const previousChatHistoryData: ChatItem = {
+          id: result?.botData?.id,
+          title: result?.botData?.title,
+          userId: result?.botData?.userId,
+          botType: result?.botData?.botType, 
+          threadId: result?.botData?.threadId,
+          subjectId: result?.botData?.subjectId,
+          chapterId: result?.botData?.chapterId,
+          createdAt: new Date().toISOString()
+        };
+        
+        dispatch(addChatHistoryItem(previousChatHistoryData));
       } else {
         toast({
           title: 'Error',
@@ -379,6 +396,8 @@ export default function ChatContainer({
         setMessages((prev) => [...prev, loadingMessage]);
 
         const result = await getAiResponse(content);
+        console.log('bot res', result);
+
         handleResponse(result, currentThreadId);
 
         if (result.success) {
@@ -397,7 +416,7 @@ export default function ChatContainer({
     },
     [imageFile, currentThreadId, createNewChat, getAiResponse, handleResponse]
   );
-//  dispatch(addChatHistoryItem());
+  //  dispatch(addChatHistoryItem());
   const handleNewChat = useCallback(() => {
     // Only proceed if there are messages
     if (messages.length === 0) return;
@@ -439,22 +458,13 @@ export default function ChatContainer({
 
   return (
     <div className="flex h-[calc(100vh-4rem)] w-full">
-      <div className="flex w-full sm:w-[70%]  mx-auto flex-col px-4">
-        <Header
-          title={chatTitle}
-          onNewChat={handleNewChat}
-          disableNewChat={messages.length === 0}
-        />
-    
-        <div className="relative flex-1 overflow-hidden mt-2 min-h-0">
-          <MessageList
-            messages={messages}
-            isLoading={isLoading}
-            prompts={prompts || []}
-            onSendMessage={handleSendMessage}
-          />
+      <div className="mx-auto flex w-full flex-col px-4 sm:w-[70%]">
+        <Header title={chatTitle} onNewChat={handleNewChat} disableNewChat={messages.length === 0} />
+
+        <div className="relative mt-2 min-h-0 flex-1 overflow-hidden">
+          <MessageList messages={messages} isLoading={isLoading} prompts={prompts || []} onSendMessage={handleSendMessage} />
         </div>
-    
+
         <div className="flex-none py-4">
           <ChatInput
             onSendMessage={handleSendMessage}
@@ -464,15 +474,12 @@ export default function ChatContainer({
           />
           <div className="mt-2 w-full">
             <p className="text-center text-sm text-gray-500">
-              <span className="block text-xs">
-                Our bots make mistakes. Double-check important details.
-              </span>
+              <span className="block text-xs">Our bots make mistakes. Double-check important details.</span>
               {AI.TOKEN_COUNT} <span className="font-semibold">{tokenDetails?.remainingTokens}</span>
             </p>
           </div>
         </div>
       </div>
     </div>
-  
   );
 }

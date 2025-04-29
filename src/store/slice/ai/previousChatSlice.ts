@@ -26,35 +26,40 @@ const previousChatSlice = createSlice({
   initialState,
   reducers: {
     // ---------------- Set entire chat history ---------------
-    setChatHistory: (state, action: PayloadAction<ChatItem[]>) => {
-      const seen = new Set();
-      const unique = action.payload.filter((item) => {
-        if (seen.has(item.threadId)) return false;
-        seen.add(item.threadId);
-        return true;
+    // ---------------- Set entire chat history ---------------
+    setChatHistory(state, action: PayloadAction<ChatItem[]>) {
+      const map = new Map<string, ChatItem>();
+      action.payload.forEach(item => {
+        // require both threadId and non-placeholder title
+        if (item.threadId && item.title && item.title !== 'Untitled Chat') {
+          if (!map.has(item.threadId)) {
+            map.set(item.threadId, item);
+          }
+        }
       });
-
-      state.previousChatHistory = unique;
+      state.previousChatHistory = Array.from(map.values());
     },
 
-    // ---------------- Add new chat item to the top (no duplicates by threadId) ---------------
-    addChatHistoryItem: (state, action: PayloadAction<ChatItem>) => {
-      const exists = state.previousChatHistory.some(
-        (item) => item.threadId === action.payload.threadId
-      );
-
-      if (!exists) {
-        state.previousChatHistory.unshift(action.payload);
+    // ---------------- Add a single new chat entry if valid and unique ---------------
+    addChatHistoryItem(state, action: PayloadAction<ChatItem>) {
+      const incoming = action.payload;
+      if (incoming.threadId && incoming.title && incoming.title !== 'Untitled Chat') {
+        // check existing by threadId
+        const exists = state.previousChatHistory.some(item => item.threadId === incoming.threadId);
+        if (!exists) {
+          state.previousChatHistory.unshift(incoming);
+        }
       }
     },
 
-    // --------------- Update an existing item by ID --------------
-    updateChatHistoryItem: (state, action: PayloadAction<ChatItem>) => {
-      const index = state.previousChatHistory.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.previousChatHistory[index] = action.payload;
+    // ---------------- Update an existing chat entry ---------------
+    updateChatHistoryItem(state, action: PayloadAction<ChatItem>) {
+      const incoming = action.payload;
+      if (incoming.threadId && incoming.title && incoming.title !== 'Untitled Chat') {
+        const idx = state.previousChatHistory.findIndex(item => item.id === incoming.id);
+        if (idx !== -1) {
+          state.previousChatHistory[idx] = incoming;
+        }
       }
     },
     // --------------- Delete by ID --------------

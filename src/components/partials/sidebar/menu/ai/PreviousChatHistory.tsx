@@ -124,8 +124,7 @@ const PreviousChatHistory = () => {
         if (res && res.length > 0) {
           const uniqueByThreadId = new Map<string, IAiDoubtModuleAnswerProps>();
           res.forEach((item) => {
-            // Check if both threadId and title exist before adding to the map
-            if (item.threadId && item.title) {
+            if (item.threadId) {
               if (!uniqueByThreadId.has(item.threadId)) {
                 uniqueByThreadId.set(item.threadId, item);
               }
@@ -235,7 +234,7 @@ const PreviousChatHistory = () => {
                 }}
                 className={cn(
                   'cursor-pointer rounded-lg px-2 py-1 transition-all', 
-                  activeChatId === item.id ? 'bg-[#000080] text-white' : 'hover:bg-accent'
+                  activeChatId === item.id ? ' text-white' : 'hover:bg-accent'
                 )}
               >
                 <p className="flex items-center gap-2 text-[15px]">
