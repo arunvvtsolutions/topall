@@ -124,10 +124,13 @@ const PreviousChatHistory = () => {
         if (res && res.length > 0) {
           const uniqueByThreadId = new Map<string, IAiDoubtModuleAnswerProps>();
           res.forEach((item) => {
-              if (!uniqueByThreadId.has(item.threadId || '')) {
-              uniqueByThreadId.set(item.threadId || '', item);
+            // Check if both threadId and title exist before adding to the map
+            if (item.threadId && item.title) {
+              if (!uniqueByThreadId.has(item.threadId)) {
+                uniqueByThreadId.set(item.threadId, item);
+              }
             }
-          })
+          });
           const uniqueChatsArray = Array.from(uniqueByThreadId.values());
           const mappedChats = uniqueChatsArray.map((item): ChatItem => ({
             id: item.id.toString(),
