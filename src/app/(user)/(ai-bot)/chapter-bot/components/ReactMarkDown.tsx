@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
@@ -8,9 +8,52 @@ import remarkGfm from "remark-gfm";
 import "katex/dist/katex.min.css";
 
 function MarkdownForBot({ content }: { content: string }) {
+  console.log(content);
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const preprocessLaTeX = useCallback((content: string) => {
+    const lineBreakProcessed = content
+      .replace(/\\n/g, "\n") // Convert escaped \n to actual newlines
+      .replace(/\n\t+/g, "\n&nbsp;&nbsp;&nbsp;&nbsp;") // Replace tabs with spaces
+      .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;") // Convert stray tabs
+      .replace(/(\d)\s+(\d)/g, "$1\u200B$2"); // Prevent number splitting
+
+    // Ensure "Question X" starts on a separate line
+    const questionFormattedContent = lineBreakProcessed.replace(
+      /(.*?)(\*\*Question\s*\d+:?\*\*)/g,
+      (_, beforeQuestion, questionHeading) => `${beforeQuestion.trim()}\n\n${questionHeading}\n`
+    );
+
+    // 1. Insert line breaks before "**Options:**" if needed.
+    //    This replaces any spaces + "**Options:**" with "\n\n**Options:**"
+    const optionsTitleFormatted = questionFormattedContent.replace(/\s*\*\*Options:?\*\*\s*/g, "\n\n**Options**\n\n");
+
+    //  removed dynamically picking Ensure **any heading (bold/italic)** starts on a new line
+    const formattedHeadings = optionsTitleFormatted.replace(
+      /(\n)?(\*{2,3}[\w\s]+:\*{2,3})/g, // Matches **Heading:** or ***Heading:***
+      "\n\n$2\n\n"
+    );
+
+    // 2. Put each option (A), B), C), D)) on its own line.
+    const separatedOptions = formattedHeadings.replace(
+      /(A\)|B\)|C\)|D\))[\s\S]*?(?=(?:\n[A-D]\))|$)/g,
+      (match) => `\n${match.trim()}\n`
+    );
+    
+    // Process block equations ($$ ... $$)
+    const blockProcessedContent = separatedOptions.replace(/\\\[(.*?)\\\]/g, (_, equation) => `$$${equation}$$`);
+
+    // Process inline equations ($ ... $)
+    const inlineProcessedContent = blockProcessedContent.replace(/\\\((.*?)\\\)/g, (_, equation) => `$${equation}$`);
+
+    // Additional step: Remove extra escaping (double backslashes to single backslashes)
+    const fullyProcessedContent = inlineProcessedContent.replace(/\\\\/g, "\\");
+
+    return fullyProcessedContent;
+  }, []);
   
+  const processedContent = preprocessLaTeX(`${content}`);
   return (
     <>
       <div className="mark_down_text">
@@ -34,7 +77,7 @@ function MarkdownForBot({ content }: { content: string }) {
           }}
           {...({ breaks: true } as any)}
         >
-          {content}
+         {processedContent}
         </ReactMarkdown>
       </div>
 

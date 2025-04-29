@@ -52,7 +52,7 @@ const PreviousChatHistory = () => {
 
   const { userId } = useSelector((state: RootState) => state.userProfile);
   const chatHistory = useSelector((state: RootState) => state.aiPreviousChats.previousChatHistory);
-  const [activeChatId, setActiveChatId] = useState<string | null>(null);  // track selected chat
+  const [activeChatId, setActiveChatId] = useState<string | null>(null);  // 👈 track selected chat
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -227,7 +227,7 @@ const PreviousChatHistory = () => {
                       item?.subjectId,
                       item?.chapterId,
                     );
-                    setActiveChatId(item.id);   // set clicked chat as active
+                    setActiveChatId(item.id);   // 👈 set clicked chat as active
                   }
                 }}
                 className={cn(

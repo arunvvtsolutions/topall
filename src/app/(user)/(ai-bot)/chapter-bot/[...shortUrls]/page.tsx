@@ -12,5 +12,5 @@ export default function Page({ params }: { params: { shortUrls: string[] } }) {
   );
   const subjectId = params.shortUrls?.[0];
   const chapterId = params.shortUrls?.[1];
-  return <ChatContainer chapterId={Number(chapterId)} subjectId={Number(subjectId)}  botType={BOT_TYPE.ASK_DOUBTS}  params={params} threadId={threadId} />;
+  return <ChatContainer chapterId={Number(chapterId)} title="Chapter Bot" subjectId={Number(subjectId)}  botType={BOT_TYPE.ASK_DOUBTS}  params={params} threadId={threadId} />;
 }

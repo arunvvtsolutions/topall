@@ -35,9 +35,9 @@ export default function MessageList({ messages, isLoading, prompts ,onSendMessag
     const isScrolledUp = scrollHeight - scrollTop - clientHeight > 100;
     setShowScrollButton(isScrolledUp);
   };
-
+  // relative flex h-full flex-col
   return (
-    <div className="relative flex h-full flex-col">
+    <div className="">
       <div
         ref={scrollRef}
         className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent flex-1 overflow-y-auto pr-2"

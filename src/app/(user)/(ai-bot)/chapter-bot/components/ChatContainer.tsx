@@ -12,7 +12,6 @@ import { RootState, useDispatch, useSelector } from '@/store';
 import { getAiBotsList } from '@/utils/api/ai/ai-bots';
 import { getAiTokenById } from '@/utils/api/ai/ai-token';
 import { addChatHistoryItem, setChatHistory } from '@/store/slice/ai/previousChatSlice';
-import { useRouter } from 'next/navigation';
 import { AI } from './types';
 
 interface PromptCard {
@@ -102,8 +101,8 @@ export default function ChatContainer({
 }: ChatContainerProps) {
   const { userId, standard } = useSelector((state: RootState) => state.userProfile);
   const { standards } = useSelector((state: RootState) => state.selectors);
-  const router = useRouter();
   const dispatch = useDispatch();
+  
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<ImageFileProps>({});
@@ -151,7 +150,7 @@ export default function ChatContainer({
         .split('/')
         .filter((part) => !part.startsWith(AI.THREAD_KEY))
         .join('/');
-      router.push(`${basePathname}/${currentThreadId}`);
+      window.history.pushState({}, '', `${basePathname}/${currentThreadId}`);
     }
   }, [currentThreadId, initialThreadId]);
   useEffect(() => {
@@ -276,7 +275,7 @@ export default function ChatContainer({
             throw new Error(`Unsupported bot type: ${botType}`);
         }
 
-        console.log('🧠 AI Response:', apiResponse);
+        console.log(apiResponse);
 
         return {
           success: true,
@@ -324,7 +323,7 @@ export default function ChatContainer({
           content: result.data.answer,
           role: 'assistant',
           threadId,
-          isTyping: true
+          // isTyping: true
         };
 
         setMessages((prev) => [...prev, assistantMessage]);
@@ -360,11 +359,12 @@ export default function ChatContainer({
             .split('/')
             .filter((part) => !part.startsWith(AI.THREAD_KEY))
             .join('/');
-          router.push(`${basePathname}/${threadId}`);
+          window.history.pushState({}, '', `${basePathname}/${threadId}`);
         }
 
         const userMessage = createNewChat(content, imageFile, threadId);
         setMessages((prev) => [...prev, userMessage]);
+        setLastMsg(content); // Store the last message content
 
         if (imageFile.url) setImageFile({});
 
@@ -430,7 +430,7 @@ export default function ChatContainer({
       .split('/')
       .filter((part) => !part.startsWith(AI.THREAD_KEY))
       .join('/');
-    router.push(`${basePathname}/${newThreadId}`);
+    window.history.pushState({}, '', `${basePathname}/${newThreadId}`);
   }, [welcomeMessage, messages.length]);
 
   const isChatLoading = useMemo(() => isLoading || activeMessageId !== null, [isLoading, activeMessageId]);
@@ -441,7 +441,7 @@ export default function ChatContainer({
     <div className="flex items-center justify-center">
       <div className="flex h-[90vh] w-[90%] max-w-[1000px] flex-col">
         <Header title={chatTitle} onNewChat={handleNewChat} disableNewChat={messages.length === 0} />
-        <div className="relative flex-1 overflow-hidden">
+        <div className="relative flex-1 overflow-hidden mt-2">
         <MessageList messages={messages} isLoading={isLoading} prompts={prompts || []} onSendMessage={handleSendMessage} />
         </div>
         <div className="flex-none">
