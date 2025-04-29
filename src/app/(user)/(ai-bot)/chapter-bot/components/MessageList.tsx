@@ -37,26 +37,26 @@ export default function MessageList({ messages, isLoading, prompts ,onSendMessag
   };
   // relative flex h-full flex-col
   return (
-    <div className="">
+    <div className="relative flex flex-col h-full"> {/* ✅ Important: relative, flex-col, h-full */}
       <div
         ref={scrollRef}
-        className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent flex-1 overflow-y-auto pr-2"
+        className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-2"
         onScroll={handleScroll}
       >
-        <div className="flex flex-col space-y-6">
+        <div className="flex flex-col space-y-6 p-2">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center pt-24">
               <div className="flex flex-col items-center space-y-6">
-                <div className="text-xl font-semibold">Hello, How can I help you today</div>
+                <div className="text-xl font-semibold">
+                  Hello, How can I help you today
+                </div>
                 <CardGrid cards={prompts} onSendMessage={onSendMessage} />
               </div>
             </div>
           ) : (
-            <>
-              {messages.map((message) => (
-                <ChatMessage key={message.id} message={message} isTyping={message.isTyping} />
-              ))}
-            </>
+            messages.map((message) => (
+              <ChatMessage key={message.id} message={message} isTyping={message.isTyping} />
+            ))
           )}
           {isLoading && <LoadingIndicator />}
           <div className="h-4" />
@@ -65,11 +65,11 @@ export default function MessageList({ messages, isLoading, prompts ,onSendMessag
 
       {showScrollButton && (
         <button
-          className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 transform items-center gap-2 rounded-full px-2 border bg-[#dbdbdb]  py-1 text-black shadow-2xl transition-all "
+          className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 transform items-center gap-2 rounded-full px-2 border bg-[#dbdbdb] py-1 text-black shadow-2xl transition-all"
           onClick={() => scrollToBottom(true)}
           aria-label="Scroll to new messages"
         >
-          <ArrowDown className='text-[#535353] w-5'/>
+          <ArrowDown className="text-[#535353] w-5" />
         </button>
       )}
     </div>

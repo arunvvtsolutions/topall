@@ -50,7 +50,7 @@ function MarkdownForBot({ content }: { content: string }) {
     // Additional step: Remove extra escaping (double backslashes to single backslashes)
     const fullyProcessedContent = inlineProcessedContent.replace(/\\\\/g, "\\");
 
-    return fullyProcessedContent;
+    return separatedOptions;
   }, []);
   
   const processedContent = preprocessLaTeX(`${content}`);
