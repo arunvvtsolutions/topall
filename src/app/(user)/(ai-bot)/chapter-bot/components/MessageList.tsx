@@ -6,7 +6,7 @@ import ChatMessage from './ChatMessage';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutoScroll } from './useScrollToBottom';
 import CardGrid from '../../doubt-ai/components/ai-prompt-card';
-import { ArrowDown, ArrowDownAZ } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 
 interface PromptCard {
   id: number;
@@ -22,11 +22,9 @@ interface MessageListProps {
   onSendMessage: (message: string) => void
 }
 
-export default function MessageList({ messages, isLoading, prompts ,onSendMessage}: MessageListProps) {
+export default function MessageList({ messages, isLoading, prompts, onSendMessage}: MessageListProps) {
   const { scrollRef, scrollToBottom, handleScroll: autoScrollHandler } = useAutoScroll([messages]);
   const [showScrollButton, setShowScrollButton] = useState(false);
-
-  console.log("messages",messages);
   
   // Handle scroll events to show/hide scroll button
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -35,19 +33,19 @@ export default function MessageList({ messages, isLoading, prompts ,onSendMessag
     const isScrolledUp = scrollHeight - scrollTop - clientHeight > 100;
     setShowScrollButton(isScrolledUp);
   };
-  // relative flex h-full flex-col
+
   return (
-    <div className="relative flex flex-col h-full"> {/* ✅ Important: relative, flex-col, h-full */}
+    <div className="relative flex flex-col h-full w-full">
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pr-2"
+        className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
         onScroll={handleScroll}
       >
-        <div className="flex flex-col space-y-6 p-2">
+        <div className="flex flex-col space-y-4 w-full">
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center pt-24">
-              <div className="flex flex-col items-center space-y-6">
-                <div className="text-xl font-semibold">
+            <div className="flex flex-col items-center justify-center pt-24 w-full">
+              <div className="flex flex-col items-center space-y-6 w-full max-w-4xl mx-auto px-4">
+                <div className="text-xl font-semibold text-center">
                   Hello, How can I help you today
                 </div>
                 <CardGrid cards={prompts} onSendMessage={onSendMessage} />
@@ -65,11 +63,12 @@ export default function MessageList({ messages, isLoading, prompts ,onSendMessag
 
       {showScrollButton && (
         <button
-          className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 transform items-center gap-2 rounded-full px-2 border bg-[#dbdbdb] py-1 text-black shadow-2xl transition-all"
+          className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 transform items-center gap-2 rounded-full px-3 py-2 bg-white/90 text-gray-700 shadow-lg hover:bg-white transition-all border border-gray-200"
           onClick={() => scrollToBottom(true)}
           aria-label="Scroll to new messages"
         >
-          <ArrowDown className="text-[#535353] w-5" />
+          <ArrowDown className="w-4 h-4" />
+          {/* <span className="text-sm">New messages</span> */}
         </button>
       )}
     </div>

@@ -438,42 +438,41 @@ export default function ChatContainer({
   const chatPlaceholder = placeholder || 'Type your message here...';
 
   return (
-    <div className="flex items-center justify-center">
-    <div className="flex h-[90vh] w-[90%] max-w-[1000px] flex-col">
-      <Header
-        title={chatTitle}
-        onNewChat={handleNewChat}
-        disableNewChat={messages.length === 0}
-      />
-  
-      {/* ✅ Add min-h-0 to allow children to shrink for scroll */}
-      <div className="relative flex-1 overflow-hidden mt-2 min-h-0">
-        <MessageList
-          messages={messages}
-          isLoading={isLoading}
-          prompts={prompts || []}
-          onSendMessage={handleSendMessage}
+    <div className="flex h-[calc(100vh-4rem)] w-full">
+      <div className="flex w-full sm:w-[70%]  mx-auto flex-col px-4">
+        <Header
+          title={chatTitle}
+          onNewChat={handleNewChat}
+          disableNewChat={messages.length === 0}
         />
-      </div>
-  
-      <div className="flex-none">
-        <ChatInput
-          onSendMessage={handleSendMessage}
-          isLoading={isChatLoading}
-          isCustomized={true}
-          textAreaPlaceholder={chatPlaceholder}
-        />
-        <div className="mt-1 w-full">
-          <p className="text-center text-[14px]">
-            <span className="block text-[12px] text-[#8B8B8B]">
-              Our bots make mistakes. Double-check important details.
-            </span>
-            {AI.TOKEN_COUNT} <span className="font-bold">{tokenDetails?.remainingTokens}</span>
-          </p>
+    
+        <div className="relative flex-1 overflow-hidden mt-2 min-h-0">
+          <MessageList
+            messages={messages}
+            isLoading={isLoading}
+            prompts={prompts || []}
+            onSendMessage={handleSendMessage}
+          />
+        </div>
+    
+        <div className="flex-none py-4">
+          <ChatInput
+            onSendMessage={handleSendMessage}
+            isLoading={isChatLoading}
+            isCustomized={true}
+            textAreaPlaceholder={chatPlaceholder}
+          />
+          <div className="mt-2 w-full">
+            <p className="text-center text-sm text-gray-500">
+              <span className="block text-xs">
+                Our bots make mistakes. Double-check important details.
+              </span>
+              {AI.TOKEN_COUNT} <span className="font-semibold">{tokenDetails?.remainingTokens}</span>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   
   );
 }
