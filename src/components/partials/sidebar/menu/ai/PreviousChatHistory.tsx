@@ -8,6 +8,7 @@ import { setChatHistory, ChatItem } from '@/store/slice/ai/previousChatSlice';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { BotIcon, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useConfig } from '@/hooks/use-config';
 
 export interface IAiDoubtModuleAnswerProps {
   id: number;
@@ -33,26 +34,29 @@ export interface IAiDoubtModuleAnswerProps {
 }
 const BOTS = {
   CHAPTER_BOT: {
-    pathname : '/chapter-bot',
-    botType: 2,
+    pathname: '/chapter-bot',
+    botType: 2
   },
   CAREER_BOT: {
-    pathname : '/doubt-ai',
-    botType: 1,
+    pathname: '/doubt-ai',
+    botType: 1
   },
   TOPIC_BOT: {
-    pathname : '/topic-bot',
-    botType: 4,
+    pathname: '/topic-bot',
+    botType: 4
   }
-}
+};
 const PreviousChatHistory = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
+  const [config, setConfig] = useConfig();
+  const collapsed = config.collapsed;
+  console.log('collapsed', collapsed);
 
   const { userId } = useSelector((state: RootState) => state.userProfile);
   const chatHistory = useSelector((state: RootState) => state.aiPreviousChats.previousChatHistory);
-  const [activeChatId, setActiveChatId] = useState<string | null>(null);  // 👈 track selected chat
+  const [activeChatId, setActiveChatId] = useState<string | null>(null); // 👈 track selected chat
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -95,7 +99,7 @@ const PreviousChatHistory = () => {
           case BOTS.CHAPTER_BOT.botType:
             payload = {
               userId: Number(userId),
-              botType: currentBotType,
+              botType: currentBotType
             };
             break;
           case BOTS.TOPIC_BOT.botType:
@@ -104,13 +108,13 @@ const PreviousChatHistory = () => {
               botType: currentBotType,
               subjectId: subjectId ? Number(subjectId) : undefined,
               chapterId: chapterId ? Number(chapterId) : undefined,
-              topicId: topicId ? Number(topicId) : undefined,
+              topicId: topicId ? Number(topicId) : undefined
             };
             break;
           case BOTS.CAREER_BOT.botType:
             payload = {
               userId: Number(userId),
-              botType: currentBotType,
+              botType: currentBotType
             };
             break;
           default:
@@ -122,25 +126,18 @@ const PreviousChatHistory = () => {
         const res: IAiDoubtModuleAnswerProps[] = await getAiPreviousChatHistory(payload);
         console.log(res, 'Previous chat history response');
         if (res && res.length > 0) {
-          const uniqueByThreadId = new Map<string, IAiDoubtModuleAnswerProps>();
-          res.forEach((item) => {
-            if (item.threadId) {
-              if (!uniqueByThreadId.has(item.threadId)) {
-                uniqueByThreadId.set(item.threadId, item);
-              }
-            }
-          });
-          const uniqueChatsArray = Array.from(uniqueByThreadId.values());
-          const mappedChats = uniqueChatsArray.map((item): ChatItem => ({
-            id: item.id.toString(),
-            title: item.title || 'Untitled Chat',
-            userId: item.userId.toString(),
-            botType: item.botType?.toString() || '0',
-            threadId: item.threadId || `thread-${item.id}`,
-            subjectId: item.subjectId?.toString() || null,
-            chapterId: item.chapterId?.toString() || null,
-            createdAt: item.addedDate,
-          }));
+          const mappedChats = res.map(
+            (item): ChatItem => ({
+              id: item.id.toString(),
+              title: item.title || 'Untitled Chat',
+              userId: item.userId.toString(),
+              botType: item.botType?.toString() || '0',
+              threadId: item.threadId || `thread-${item.id}`,
+              subjectId: item.subjectId?.toString() || null,
+              chapterId: item.chapterId?.toString() || null,
+              createdAt: item.addedDate
+            })
+          );
           dispatch(setChatHistory(mappedChats));
         }
       } catch (error) {
@@ -149,7 +146,6 @@ const PreviousChatHistory = () => {
         setLoading(false);
       }
     };
-    
 
     fetchPreviousChats();
   }, [userId, pathname, dispatch]);
@@ -196,59 +192,39 @@ const PreviousChatHistory = () => {
 
   return (
     <Accordion type="single" collapsible>
-      <AccordionItem className="border-0 bg-t" value="history">
-        <AccordionTrigger
-          className={cn(
-            'flex w-full items-center justify-start gap-2 rounded-lg px-3 py-2 text-left text-[15px]',
-            'hover:bg-accent hover:no-underline'
-          )}
-        >
-          <BotIcon className="h-5 w-5" />
-          Previous Chat History
-        </AccordionTrigger>
+    <AccordionItem className="border-0 mb-0" value="history">
+      <AccordionTrigger className={cn('bg-transparent px-3 py-0 mb-0 text-white justify-start' , '')}>
+        <BotIcon className=" h-6 w-6 mr-2" />
+        <span >Previous History</span>
+      </AccordionTrigger>
 
-        <AccordionContent className="bg-white px-2 py-2 scrollbar-hide mt-2 max-h-[200px] overflow-y-scroll border-0 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-500 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:bg-gray-200 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar]:w-1">
-          {loading ? (
-             <div className="space-y-3 px-2 py-2">
-             {[1, 2, 3,4,5,6].map((_, index) => (
-               <div key={index} className="h-7 w-full bg-gray-300 dark:bg-gray-600 animate-pulse rounded"></div>
-             ))}
-           </div>
-          ) : chatHistory.length === 0 ? (
-            <p className="text-sm italic text-gray-500">No previous chats found.</p>
-          ) : (
-            <div className="space-y-2">
-              {chatHistory.map((item) => (
-                <div
-                key={item.id}
-                onClick={() => {
-                  if (item.threadId && item.botType) {
-                    handleNavigate(
-                      Number(item.botType),
-                      item?.threadId,
-                      item?.subjectId,
-                      item?.chapterId,
-                    );
-                    setActiveChatId(item.id);   // 👈 set clicked chat as active
-                  }
-                }}
-                className={cn(
-                  'cursor-pointer rounded-lg px-2 py-1 transition-all', 
-                  activeChatId === item.id ? ' text-white' : 'hover:bg-accent'
-                )}
-              >
-                <p className="flex items-center gap-2 text-[15px]">
-                  <ChevronRight className="h-4 w-4" />
-                  {item.title}
-                </p>
-              </div>
-              
-              ))}
+      <AccordionContent className="scrollbar-hide mt-2 bg-white rounded-sm max-h-52 overflow-y-auto  px-2 py-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-500 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:bg-gray-200 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar]:w-1">
+        {loading ? (
+          <div className="space-y-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-6 w-full animate-pulse rounded bg-gray-300" />
+            ))}
+          </div>
+        ) : chatHistory.length === 0 ? (
+          <p className="text-sm italic text-gray-500">No previous chats found.</p>
+        ) : (
+          chatHistory.map((item) => (
+            <div
+              key={item.id}
+              onClick={() => handleNavigate(Number(item.botType), item.threadId, item.subjectId, item.chapterId)}
+              className={cn(
+                'flex cursor-pointer items-center gap-2 rounded px-2 py-1 hover:bg-accent',
+                activeChatId === item.id && 'bg-accent'
+              )}
+            >
+              <ChevronRight className="h-4 w-4" />
+              <span className="text-sm">{item.title}</span>
             </div>
-          )}
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+          ))
+        )}
+      </AccordionContent>
+    </AccordionItem>
+  </Accordion>
   );
 };
 

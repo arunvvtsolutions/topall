@@ -3,8 +3,8 @@ export interface Message {
   content: string
   role: 'user' | 'assistant'
   isTyping?: boolean
-  imageUrl?: string
   fileName?: string
+  assetUrl?: string
 }
 
 export enum AI {
