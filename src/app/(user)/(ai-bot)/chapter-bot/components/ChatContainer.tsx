@@ -31,6 +31,7 @@ interface ChatContainerProps {
   subjectId?: number
   chapterId?: number
   prompts?: PromptCard[]
+  subjectName?:string
 }
 
 interface Message {
@@ -100,7 +101,8 @@ export default function ChatContainer({
   params,
   chapterId,
   subjectId,
-  prompts
+  prompts,
+  subjectName
 }: ChatContainerProps) {
   const { userId, standard } = useSelector((state: RootState) => state.userProfile)
   const { standards } = useSelector((state: RootState) => state.selectors)
@@ -121,7 +123,6 @@ export default function ChatContainer({
       if (res) {
         setTokenDetails(res)
       }
-      console.log(res, 'token details')
     } catch (error) {
       console.error('Error fetching AI token:', error)
     }
@@ -451,7 +452,7 @@ export default function ChatContainer({
   return (
     <div className="flex h-[calc(100vh-4rem)] w-full">
       <div className="mx-auto flex w-full flex-col px-4 sm:w-[70%]">
-        <Header title={chatTitle} onNewChat={handleNewChat} disableNewChat={messages.length === 0} />
+        <Header title={chatTitle} onNewChat={handleNewChat} disableNewChat={messages.length === 0} subjectName={subjectName}/>
 
         <div className="relative mt-2 min-h-0 flex-1 overflow-hidden">
           <MessageList messages={messages} isLoading={isLoading} prompts={prompts || []} onSendMessage={handleSendMessage} />
