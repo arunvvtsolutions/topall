@@ -3,34 +3,54 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
+<<<<<<< HEAD
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void
+=======
+import { CrossIcon, ImageIcon, LoaderIcon, SendIcon } from 'lucide-react'
+import axios from 'axios'
+
+interface ChatInputProps {
+  onSendMessage: (message: string, assetUrl?: string, fileName?: string) => void // Updated to accept assetUrl and fileName separately
+>>>>>>> cfab089 (changes in ui dev + arun)
   isLoading: boolean
   isCustomized?: boolean
   textAreaPlaceholder?: string
 }
 
+<<<<<<< HEAD
 // Icons for the chat input
+=======
+>>>>>>> cfab089 (changes in ui dev + arun)
 const AttachIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M21.44 11.05L12.25 20.24C11.1242 21.3658 9.59723 21.9983 8.005 21.9983C6.41277 21.9983 4.88584 21.3658 3.76 20.24C2.63416 19.1142 2.00166 17.5872 2.00166 15.995C2.00166 14.4028 2.63416 12.8758 3.76 11.75L12.33 3.18C13.0806 2.42943 14.0991 2.00017 15.16 2.00017C16.2209 2.00017 17.2394 2.42943 17.99 3.18C18.7406 3.93057 19.1699 4.94912 19.1699 6.01C19.1699 7.07088 18.7406 8.08943 17.99 8.84L9.41 17.41C9.03472 17.7853 8.52573 17.9961 7.995 17.9961C7.46427 17.9961 6.95528 17.7853 6.58 17.41C6.20472 17.0347 5.99389 16.5257 5.99389 15.995C5.99389 15.4643 6.20472 14.9553 6.58 14.58L15.07 6.1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 )
+<<<<<<< HEAD
 
+=======
+>>>>>>> cfab089 (changes in ui dev + arun)
 const SendPlane = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M18.3333 1.66667L9.16667 10.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M18.3333 1.66667L12.5 18.3333L9.16667 10.8333L1.66667 7.5L18.3333 1.66667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 )
+<<<<<<< HEAD
 
+=======
+>>>>>>> cfab089 (changes in ui dev + arun)
 const Cross2Icon = () => (
   <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
   </svg>
 )
+<<<<<<< HEAD
 
+=======
+>>>>>>> cfab089 (changes in ui dev + arun)
 const LoadingSpinner = () => (
   <div className="animate-spin h-5 w-5">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -43,11 +63,18 @@ const LoadingSpinner = () => (
 export default function ChatInput({ onSendMessage, isLoading, isCustomized = false, textAreaPlaceholder }: ChatInputProps) {
   const [input, setInput] = useState('')
   const [imageFile, setImageFile] = useState<{ url: string; fileName: string }>({ url: '', fileName: '' })
+<<<<<<< HEAD
+=======
+  const [uploadProgress, setUploadProgress] = useState(0)
+>>>>>>> cfab089 (changes in ui dev + arun)
   const fileRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
+<<<<<<< HEAD
     // Auto-adjust height on initial render
+=======
+>>>>>>> cfab089 (changes in ui dev + arun)
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
       textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`
@@ -57,6 +84,7 @@ export default function ChatInput({ onSendMessage, isLoading, isCustomized = fal
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() && !imageFile.url) return
+<<<<<<< HEAD
     
     // Here you would typically handle both text and image
     // For now, we'll just handle the text part
@@ -64,6 +92,18 @@ export default function ChatInput({ onSendMessage, isLoading, isCustomized = fal
     setInput('')
     setImageFile({ url: '', fileName: '' })
   }
+=======
+
+    // Send the text and image URL separately
+    onSendMessage(input.trim(), imageFile.url || undefined, imageFile.fileName || undefined)
+    setInput('')
+    setImageFile({ url: '', fileName: '' })
+    setUploadProgress(0)
+    console.log('Image file:', imageFile);
+    
+  }
+  console.log('Image file:', imageFile);
+>>>>>>> cfab089 (changes in ui dev + arun)
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -76,11 +116,40 @@ export default function ChatInput({ onSendMessage, isLoading, isCustomized = fal
     fileRef.current?.click()
   }
 
+<<<<<<< HEAD
   const handleFileOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       const url = URL.createObjectURL(file)
       setImageFile({ url, fileName: file.name })
+=======
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const form = new FormData()
+    form.append('file', file)
+    form.append('folder', process.env.NEXT_PUBLIC_S3_IMAGE_FOLDER || 'image')
+
+    try {
+      const res = await axios.post('/api/s3-upload', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: ev => {
+          setUploadProgress(Math.round((ev.loaded * 100) / (ev.total || 1)))
+        }
+      })
+      const { success, url, fileName } = res.data as {
+        success: boolean
+        url: string
+        fileName: string
+      }
+      if (!success) throw new Error('Upload failed')
+      setImageFile({ url, fileName })
+    } catch (err) {
+      console.error('Upload error', err)
+      setUploadProgress(0)
+      setImageFile({ url: '', fileName: '' })
+>>>>>>> cfab089 (changes in ui dev + arun)
     }
   }
 
@@ -134,7 +203,11 @@ export default function ChatInput({ onSendMessage, isLoading, isCustomized = fal
                     className="absolute right-5 top-1 border-none p-[1px] cursor-pointer rounded-full bg-[#FFF] dark:bg-[#cbcbcb]"
                     onClick={onFileClear}
                   >
+<<<<<<< HEAD
                     <Cross2Icon />
+=======
+                    <CrossIcon />
+>>>>>>> cfab089 (changes in ui dev + arun)
                   </button>
                   <div className="rounded-md transition-all bg-[#e6e6e6] dark:bg-[#171717] px-4 py-2">
                     {imageFile.fileName}
@@ -146,7 +219,11 @@ export default function ChatInput({ onSendMessage, isLoading, isCustomized = fal
                     className="absolute right-7 top-3 border-none p-[1px] cursor-pointer rounded-full bg-[#cbcbcb]"
                     onClick={onFileClear}
                   >
+<<<<<<< HEAD
                     <Cross2Icon />
+=======
+                    <CrossIcon />
+>>>>>>> cfab089 (changes in ui dev + arun)
                   </button>
                   <Image
                     src={imageFile.url}
@@ -166,9 +243,15 @@ export default function ChatInput({ onSendMessage, isLoading, isCustomized = fal
               type="button"
               className="bg-none border-none cursor-pointer m-auto p-2"
             >
+<<<<<<< HEAD
               <AttachIcon />
             </button>
             <input type="file" name="" id="" hidden ref={fileRef} onChange={handleFileOnchange} />
+=======
+             <AttachIcon />
+            </button>
+            <input type="file" name="" id="" hidden ref={fileRef} onChange={handleFileChange} />
+>>>>>>> cfab089 (changes in ui dev + arun)
             <textarea
               onPaste={onPasteImage}
               autoFocus
@@ -181,10 +264,16 @@ export default function ChatInput({ onSendMessage, isLoading, isCustomized = fal
               ref={textareaRef}
               onKeyPress={handleKeyPress}
               onChange={(e) => {
+<<<<<<< HEAD
                 setInput(e.target.value);
                 // Auto-grow textarea up to 120px, then scroll
                 e.target.style.height = 'auto';
                 e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+=======
+                setInput(e.target.value)
+                e.target.style.height = 'auto'
+                e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`
+>>>>>>> cfab089 (changes in ui dev + arun)
               }}
               rows={1}
               disabled={isLoading}
@@ -197,11 +286,19 @@ export default function ChatInput({ onSendMessage, isLoading, isCustomized = fal
                 isCustomized && "bg-[#000] my-auto rounded-[50px] mr-0 flex-shrink-0"
               )}
             >
+<<<<<<< HEAD
               {isBtnDisabled ? <LoadingSpinner /> : <SendPlane />}
+=======
+              {isBtnDisabled ? <LoaderIcon /> : <SendIcon />}
+>>>>>>> cfab089 (changes in ui dev + arun)
             </button>
           </div>
         </form>
       </div>
     </div>
   )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> cfab089 (changes in ui dev + arun)

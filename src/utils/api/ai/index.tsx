@@ -24,6 +24,10 @@ export interface IAiDoubtModuleSendProps {
   history : any;
   chapterId : number;
   subjectId : number;
+<<<<<<< HEAD
+=======
+  assetUrl? : string;
+>>>>>>> cfab089 (changes in ui dev + arun)
 }
 export const postChapterWiseAiBot = async (data: IAiDoubtModuleSendProps) => {
   try {

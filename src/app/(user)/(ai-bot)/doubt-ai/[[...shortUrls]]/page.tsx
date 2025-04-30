@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { BOT_TYPE } from "@/utils/api/ai-doubt-module-dummy";
+<<<<<<< HEAD
 import { ChatContainer } from "../../chapter-bot/components";
 import { getCommonAiPrompts } from "@/utils/api/ai/ai-bots";
 
@@ -32,12 +33,23 @@ export default function Page({ params }: { params: { shortUrls: string[] } }) {
   const [prompts, setPrompts] = useState<any[]>([]); // State to hold AI prompts
   const [loading, setLoading] = useState(true); // State to track loading status
   const [error, setError] = useState<string | null>(null); // State for errors
+=======
+import { AI, ChatContainer } from "../../chapter-bot/components";
+import { getCommonAiPrompts } from "@/utils/api/ai/ai-bots";
+
+
+export default function Page({ params }: { params: { shortUrls: string[] } }) {
+  const [prompts, setPrompts] = useState<any[]>([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState<string | null>(null); 
+>>>>>>> cfab089 (changes in ui dev + arun)
 
   const threadId = params.shortUrls?.find((para) => 
     para.startsWith(AI.THREAD_KEY) || para.startsWith('CS-')
   );
 
   useEffect(() => {
+<<<<<<< HEAD
     // Fetch the common AI prompts
     const fetchPrompts = async () => {
       try {
@@ -47,10 +59,21 @@ export default function Page({ params }: { params: { shortUrls: string[] } }) {
         setError("Failed to load prompts."); // Handle error
       } finally {
         setLoading(false); // Set loading to false once the request is complete
+=======
+    const fetchPrompts = async () => {
+      try {
+        const fetchedPrompts = await getCommonAiPrompts(BOT_TYPE.COMMON_BOT);
+        setPrompts(fetchedPrompts); 
+      } catch (err) {
+        setError("Failed to load prompts."); 
+      } finally {
+        setLoading(false); 
+>>>>>>> cfab089 (changes in ui dev + arun)
       }
     };
 
     fetchPrompts();
+<<<<<<< HEAD
   }, []); // Empty dependency array means this runs only once on component mount
     
   if (loading) {
@@ -59,6 +82,16 @@ export default function Page({ params }: { params: { shortUrls: string[] } }) {
 
   if (error) {
     return <div>{error}</div>; // Error state
+=======
+  }, []); 
+    
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
+
+  if (error) {
+    return <div>{error}</div>; 
+>>>>>>> cfab089 (changes in ui dev + arun)
   }
 
   return <ChatContainer botType={BOT_TYPE.COMMON_BOT} params={params} threadId={threadId} prompts={prompts} />;
