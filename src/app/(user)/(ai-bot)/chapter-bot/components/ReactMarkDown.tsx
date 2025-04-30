@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { memo, useState } from "react";
-=======
 import React, { memo, useCallback, useState } from "react";
->>>>>>> cfab089 (changes in ui dev + arun)
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
@@ -12,11 +8,6 @@ import remarkGfm from "remark-gfm";
 import "katex/dist/katex.min.css";
 
 function MarkdownForBot({ content }: { content: string }) {
-<<<<<<< HEAD
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
-  
-=======
   console.log(content);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,7 +54,6 @@ function MarkdownForBot({ content }: { content: string }) {
   }, []);
   
   const processedContent = preprocessLaTeX(`${content}`);
->>>>>>> cfab089 (changes in ui dev + arun)
   return (
     <>
       <div className="mark_down_text">
@@ -87,11 +77,7 @@ function MarkdownForBot({ content }: { content: string }) {
           }}
           {...({ breaks: true } as any)}
         >
-<<<<<<< HEAD
-          {content}
-=======
          {processedContent}
->>>>>>> cfab089 (changes in ui dev + arun)
         </ReactMarkdown>
       </div>
 

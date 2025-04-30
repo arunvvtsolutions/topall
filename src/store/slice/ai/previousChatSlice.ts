@@ -5,11 +5,8 @@ export interface ChatItem {
   title: string;
   userId: string;
   botType: string;
-<<<<<<< HEAD
-=======
   subjectId?: string | null;
   chapterId?: string | null;
->>>>>>> cfab089 (changes in ui dev + arun)
   threadId: string;
   createdAt?: string;
 }
@@ -29,37 +26,6 @@ const previousChatSlice = createSlice({
   initialState,
   reducers: {
     // ---------------- Set entire chat history ---------------
-<<<<<<< HEAD
-    setChatHistory: (state, action: PayloadAction<ChatItem[]>) => {
-      const seen = new Set();
-      const unique = action.payload.filter((item) => {
-        if (seen.has(item.threadId)) return false;
-        seen.add(item.threadId);
-        return true;
-      });
-
-      state.previousChatHistory = unique;
-    },
-
-    // ---------------- Add new chat item to the top (no duplicates by threadId) ---------------
-    addChatHistoryItem: (state, action: PayloadAction<ChatItem>) => {
-      const exists = state.previousChatHistory.some(
-        (item) => item.threadId === action.payload.threadId
-      );
-
-      if (!exists) {
-        state.previousChatHistory.unshift(action.payload);
-      }
-    },
-
-    // --------------- Update an existing item by ID --------------
-    updateChatHistoryItem: (state, action: PayloadAction<ChatItem>) => {
-      const index = state.previousChatHistory.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.previousChatHistory[index] = action.payload;
-=======
     // ---------------- Set entire chat history ---------------
     setChatHistory(state, action: PayloadAction<ChatItem[]>) {
       const map = new Map<string, ChatItem>();
@@ -94,7 +60,6 @@ const previousChatSlice = createSlice({
         if (idx !== -1) {
           state.previousChatHistory[idx] = incoming;
         }
->>>>>>> cfab089 (changes in ui dev + arun)
       }
     },
     // --------------- Delete by ID --------------

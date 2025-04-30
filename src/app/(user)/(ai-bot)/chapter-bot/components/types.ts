@@ -3,10 +3,6 @@ export interface Message {
   content: string
   role: 'user' | 'assistant'
   isTyping?: boolean
-<<<<<<< HEAD
-  imageUrl?: string
-  fileName?: string
-=======
   fileName?: string
   assetUrl?: string
 }
@@ -33,5 +29,4 @@ export enum AI {
   CAREER_BOT_SUB_PLACE_HOLDER = "How can I help you with college admissions, counseling, or predictions today?",
   TEXT_AREA_PLACEHOLDER = "Instant CBSE help - college predictions, counseling & admissions",
   CAREER_BOT_TEXT_AREA_PLACEHOLDER = "Instant CBSE help - college predictions, counseling & admissions",
->>>>>>> cfab089 (changes in ui dev + arun)
 }

@@ -5,13 +5,10 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-<<<<<<< HEAD
-=======
         hostname: 'neetguide.s3.ap-south-1.amazonaws.com'
       },
       {
         protocol: 'https',
->>>>>>> cfab089 (changes in ui dev + arun)
         hostname: 'api.lorem.space'
       },
       {
