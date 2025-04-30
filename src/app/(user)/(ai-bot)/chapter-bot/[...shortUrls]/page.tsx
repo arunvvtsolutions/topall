@@ -21,7 +21,7 @@ export default function Page({ params }: { params: { shortUrls: string[] } }) {
   const subjects = useSelector((state: RootState) => state.academic.subjects);
 
   // extract IDs from URL
-  const threadId  = params.shortUrls?.find(u => u.startsWith(AI.THREAD_KEY));
+  const threadId = params.shortUrls?.find((u) => u.startsWith(AI.THREAD_KEY));
   const subjectId = Number(params.shortUrls?.[0]);
   const chapterId = Number(params.shortUrls?.[1]);
 
@@ -31,34 +31,35 @@ export default function Page({ params }: { params: { shortUrls: string[] } }) {
   // whenever `subjects` or `subjectId` change, look up the name
   useEffect(() => {
     if (!subjects.length || !subjectId) return;
-    const found = subjects.find(s => s.id === subjectId);
+    const found = subjects.find((s) => s.id === subjectId);
     setSubjectName(found?.name ?? 'Unknown Subject');
   }, [subjects, subjectId]);
 
   // load your AI prompts
   const [prompts, setPrompts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState<string|null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getCommonAiPrompts(BOT_TYPE.ASK_DOUBTS)
-      .then(ps => setPrompts(ps))
+      .then((ps) => setPrompts(ps))
       .catch(() => setError('Failed to load prompts.'))
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <div>Loading…</div>;
-  if (error)   return <div className="text-red-500">{error}</div>;
+  if (error) return <div className="text-red-500">{error}</div>;
 
   return (
     <ChatContainer
-      title={`Chapter Bot – ${subjectName}`}
+      title="Chapter Wise Bot"
       subjectId={subjectId}
       chapterId={chapterId}
       botType={BOT_TYPE.ASK_DOUBTS}
       threadId={threadId}
       params={params}
       prompts={prompts}
+      subjectName={subjectName}
     />
   );
 }
