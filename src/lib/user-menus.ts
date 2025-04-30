@@ -89,6 +89,28 @@ export function getStudentMenus(pathname: string) {
       submenus: [],
       roles: ['student'],
       short_name: ''
+    },
+    {
+      id: 'doubt-ai',
+      href: '/doubt-ai',
+      label: 'Doubt AI',
+      active: pathname.includes('/doubt-ai'),
+      icon: '/images/icon/sidebar-icons/outline/status-up.svg',
+      filledIcon: '/images/icon/sidebar-icons/filled/status-up.svg',
+      submenus: [],
+      roles: ['student'],
+      short_name: '',
+    },
+    {
+      id: 'chapter-wise-bot',
+      href: '/chapter-wise-bot/botany',
+      label: 'Chapter Wise Bot',
+      active: pathname.includes('/chapter-wise-bot'),
+      icon: '/images/icon/sidebar-icons/outline/book.svg',
+      filledIcon: '/images/icon/sidebar-icons/filled/book.svg',
+      submenus: [],
+      roles: ['student'],
+      short_name: '',
     }
   ];
 
