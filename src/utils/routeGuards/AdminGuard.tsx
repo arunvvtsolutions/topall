@@ -13,7 +13,7 @@ const AdminGuard = ({ children }: { children: React.ReactElement }) => {
 
   if (status === SessionStatus.LOADING) return <Loader />;
 
-  if (status === SessionStatus.UNAUTHENTICATED) router.push('/auth/login');
+  if (status !== SessionStatus.UNAUTHENTICATED) router.push('/auth/login');
 
   if (status === SessionStatus.AUTHENTICATED) {
     if (data && data.user.role === Roles.STUDENT) router.push('/dashboard');

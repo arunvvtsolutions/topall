@@ -66,6 +66,8 @@ const PreviousChatHistory = () => {
       setLoading(true);
       try {
         const parts = pathname.split('/').filter(Boolean);
+        console.log('URL parts:', parts);
+        
         let currentBotType: number | null = null;
         let subjectId: string | number | null = null;
         let chapterId: string | number | null = null;
@@ -121,7 +123,7 @@ const PreviousChatHistory = () => {
             console.error('Unknown bot type for payload');
             setLoading(false);
             return;
-        }
+        };
         console.log('Payload sending:', payload);
         const res: IAiDoubtModuleAnswerProps[] = await getAiPreviousChatHistory(payload);
         console.log(res, 'Previous chat history response');
@@ -191,7 +193,7 @@ const PreviousChatHistory = () => {
   };
 
   return (
-    <Accordion type="single" collapsible>
+   !collapsed && <Accordion type="single" collapsible>
     <AccordionItem className="border-0 mb-0" value="history">
       <AccordionTrigger className={cn('bg-transparent px-3 py-0 mb-0 text-white justify-start' , '')}>
         <BotIcon className=" h-6 w-6 mr-2" />

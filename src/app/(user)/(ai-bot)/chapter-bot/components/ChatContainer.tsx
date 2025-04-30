@@ -113,9 +113,7 @@ export default function ChatContainer({
   const [tokenCount, setTokenCount] = useState<number>(100)
   const [lastMsg, setLastMsg] = useState<string>('')
   const [tokenDetails, setTokenDetails] = useState<IAiTokenProps>()
-  const [currentThreadId, setCurrentThreadId] = useState<string>(
-    initialThreadId || `${AI.THREAD_KEY}-${uuidv4().substring(0, 21)}`
-  )
+  const [currentThreadId, setCurrentThreadId] = useState<string | null>(initialThreadId || null)
 
   const fetchAiTokenByUserId = useCallback(async (userId: number) => {
     try {
@@ -145,16 +143,7 @@ export default function ChatContainer({
       }
     }
     fetchAiBots()
-
-    if (currentThreadId && !initialThreadId) {
-      const pathname = window.location.pathname
-      const basePathname = pathname
-        .split('/')
-        .filter((part) => !part.startsWith(AI.THREAD_KEY))
-        .join('/')
-      window.history.pushState({}, '', `${basePathname}/${currentThreadId}`)
-    }
-  }, [currentThreadId, initialThreadId])
+  }, [])
 
   useEffect(() => {
     if (initialThreadId) {
@@ -173,9 +162,9 @@ export default function ChatContainer({
                   content: answer.question || '',
                   role: 'user',
                   threadId: answer.threadId || initialThreadId,
-                  assetUrl: answer.assetUrl || undefined, // Mapping assetUrl to assetUrl
+                  assetUrl: answer.assetUrl || undefined,
                   fileName: answer.assetUrl ? 'Uploaded image' : undefined
-                });
+                })
               }
 
               if (answer.answer) {
@@ -184,7 +173,6 @@ export default function ChatContainer({
                   content: answer.answer,
                   role: 'assistant',
                   threadId: answer.threadId || initialThreadId,
-                  // assetUrl: answer.assetUrl || undefined
                 })
               }
             })
@@ -210,8 +198,6 @@ export default function ChatContainer({
   useEffect(() => {
     if (initialThreadId) {
       setCurrentThreadId(initialThreadId)
-    } else {
-      setCurrentThreadId(`${AI.THREAD_KEY}-${uuidv4().substring(0, 21)}`)
     }
   }, [initialThreadId])
 
@@ -228,13 +214,13 @@ export default function ChatContainer({
   )
 
   const getRandomResponse = useCallback(
-    async (botType: BOT_TYPE | undefined, message: string,assetUrl?: string) => {
+    async (botType: BOT_TYPE | undefined, message: string, assetUrl?: string, threadId?: string) => {
       try {
         if (!userId) {
           throw new Error('User ID is required')
         }
 
-        if (!currentThreadId) {
+        if (!threadId) {
           throw new Error('Thread ID is required')
         }
 
@@ -246,7 +232,7 @@ export default function ChatContainer({
           message,
           userId,
           history: lastMsg,
-          threadId: currentThreadId,
+          threadId: threadId,
           botType
         }
 
@@ -306,12 +292,12 @@ export default function ChatContainer({
         }
       }
     },
-    [chapterId, userId, currentThreadId, lastMsg]
+    [chapterId, userId, lastMsg]
   )
 
   const getAiResponse = useCallback(
-    async (message: string,assetUrl?: string) => {
-      const response = await getRandomResponse(botType, message,assetUrl)
+    async (message: string, assetUrl?: string, threadId?: string) => {
+      const response = await getRandomResponse(botType, message, assetUrl, threadId)
       console.log(response)
       return response
     },
@@ -329,8 +315,8 @@ export default function ChatContainer({
           role: 'assistant',
           threadId,
           isTyping: true,
-          assetUrl: result.botData?.assetUrl || undefined, // Add assetUrl as assetUrl
-        };
+          assetUrl: result.botData?.assetUrl || undefined,
+        }
 
         setMessages((prev) => [...prev, assistantMessage])
         setLastMsg(result.data.answer)
@@ -366,64 +352,65 @@ export default function ChatContainer({
 
   const handleSendMessage = useCallback(
     async (content: string, assetUrl?: string, fileName?: string) => {
-      console.log('handleSendMessage inputs:', { content, assetUrl, fileName }); // Keep this for debugging
-  
-      if (!content.trim() && !assetUrl) return;
-  
+      console.log('handleSendMessage inputs:', { content, assetUrl, fileName })
+
+      if (!content.trim() && !assetUrl) return
+
       try {
-        const threadId = currentThreadId || `${AI.THREAD_KEY}-${uuidv4().substring(0, 21)}`;
-        if (!currentThreadId) {
-          setCurrentThreadId(threadId);
-          const pathname = window.location.pathname;
+        let threadId = currentThreadId
+        if (!threadId) {
+          threadId = `${AI.THREAD_KEY}-${uuidv4().substring(0, 21)}`
+          setCurrentThreadId(threadId)
+          const pathname = window.location.pathname
           const basePathname = pathname
             .split('/')
             .filter((part) => !part.startsWith(AI.THREAD_KEY))
-            .join('/');
-          window.history.pushState({}, '', `${basePathname}/${threadId}`);
+            .join('/')
+          window.history.pushState({ input: content, assetFile: assetUrl || '' }, '', `${basePathname}/${threadId}`)
         }
-  
+
         const userMessage: Message = {
           id: uuidv4(),
           content,
           role: 'user',
-          assetUrl, 
+          assetUrl,
           threadId
-        };
-        setMessages((prev) => [...prev, userMessage]);
-        setLastMsg(content);
-  
-        setImageFile({}); // Reset imageFile state (not used for API payload)
-  
+        }
+        setMessages((prev) => [...prev, userMessage])
+        setLastMsg(content)
+
+        setImageFile({})
+
         const loadingMessage: Message = {
           id: uuidv4(),
           content: '',
           role: 'assistant',
           isTyping: false,
           loading: true,
-          threadId: currentThreadId,
-        };
-        setMessages((prev) => [...prev, loadingMessage]);
-  
-        const result = await getAiResponse(content, assetUrl); // Pass assetUrl to getAiResponse
-        console.log('bot res', result);
-  
-        handleResponse(result, currentThreadId);
-  
+          threadId
+        }
+        setMessages((prev) => [...prev, loadingMessage])
+
+        const result = await getAiResponse(content, assetUrl, threadId)
+        console.log('bot res', result)
+
+        handleResponse(result, threadId)
+
         if (result.success) {
-          setTokenCount((prev) => Math.max(0, prev - 1));
+          setTokenCount((prev) => Math.max(0, prev - 1))
         }
       } catch (error) {
-        console.error('Error in send message flow:', error);
+        console.error('Error in send message flow:', error)
         toast({
           title: 'Error',
           description: 'Failed to get a response. Please try again.',
-          variant: 'destructive',
-        });
-        setMessages((prev) => prev.filter((msg) => !msg.loading));
+          variant: 'destructive'
+        })
+        setMessages((prev) => prev.filter((msg) => !msg.loading))
       }
     },
     [currentThreadId, createNewChat, getAiResponse, handleResponse]
-  );
+  )
 
   const handleNewChat = useCallback(() => {
     if (messages.length === 0) return
@@ -432,8 +419,7 @@ export default function ChatContainer({
     setActiveMessageId(null)
     setLastMsg('')
     setImageFile({})
-    const newThreadId = `${AI.THREAD_KEY}-${uuidv4().substring(0, 21)}`
-    setCurrentThreadId(newThreadId)
+    setCurrentThreadId(null)
 
     if (welcomeMessage) {
       setMessages([
@@ -441,7 +427,7 @@ export default function ChatContainer({
           id: uuidv4(),
           content: welcomeMessage,
           role: 'assistant',
-          threadId: newThreadId
+          threadId: undefined
         }
       ])
     } else {
@@ -455,7 +441,7 @@ export default function ChatContainer({
       .split('/')
       .filter((part) => !part.startsWith(AI.THREAD_KEY))
       .join('/')
-    window.history.pushState({}, '', `${basePathname}/${newThreadId}`)
+    window.history.pushState({}, '', `${basePathname}`)
   }, [welcomeMessage, messages.length])
 
   const isChatLoading = useMemo(() => isLoading || activeMessageId !== null, [isLoading, activeMessageId])
