@@ -1,3 +1,36 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+# Ignore node_modules (for Node.js projects)
+node_modules/
+
+# Ignore OS-generated files (macOS, Windows)
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# Ignore environment variables file
+.env
+
+# Ignore build artifacts
+/dist
+/build
+
+# Ignore the build folder for Next.js
+.next/
+
+# Ignore Node.js dependencies
+node_modules/
+
+# Ignore logs
+*.log
+
+# Ignore environment variables file
+.env
+=======
+>>>>>>> 6134b44a332a92f17f8757e54c1595d2aeb5b29c
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -35,3 +68,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+<<<<<<< HEAD
+=======
+>>>>>>> cfab089 (changes in ui dev + arun)
+>>>>>>> 6134b44a332a92f17f8757e54c1595d2aeb5b29c
